@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertProductSchema, insertSubscriptionSchema, insertOrderSchema } from './schema';
+import { insertProductSchema, insertSubscriptionSchema, insertOrderSchema, insertWaitlistSchema } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -78,6 +78,17 @@ export const api = {
       path: '/api/orders',
       responses: {
         200: z.array(z.any()),
+      },
+    },
+  },
+  waitlist: {
+    create: {
+      method: 'POST' as const,
+      path: '/api/waitlist',
+      input: insertWaitlistSchema,
+      responses: {
+        201: z.object({ message: z.string(), id: z.number() }),
+        400: errorSchemas.validation,
       },
     },
   },

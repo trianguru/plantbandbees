@@ -22,7 +22,7 @@ export default function About() {
             <div>
               <h2 className="font-display text-3xl font-bold mb-4 text-foreground">Our Story</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                GreenStay started when we realized that short-term rental hosts love the look of plants but hate the reality of caring for them between guests. 
+                PlantBandBees started when we realized that short-term rental hosts love the look of plants but hate the reality of caring for them between guests.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed">
                 Based right here in Knoxville, TN, we specialize in high-quality, resilient plants that thrive in our local climate. Our subscription service ensures your listing always looks magazine-ready.

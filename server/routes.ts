@@ -147,11 +147,11 @@ export async function registerRoutes(
 
     try {
       const { items } = api.orders.create.input.parse(req.body);
-      
+
       // Calculate total (in a real app, verify prices from DB)
       let total = 0;
       const orderItems = [];
-      
+
       for (const item of items) {
         const product = await storage.getProduct(item.productId);
         if (product) {
@@ -171,6 +171,20 @@ export async function registerRoutes(
       }, orderItems);
 
       res.status(201).json(order);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      throw err;
+    }
+  });
+
+  // Waitlist
+  app.post(api.waitlist.create.path, async (req, res) => {
+    try {
+      const input = api.waitlist.create.input.parse(req.body);
+      const signup = await storage.createWaitlistSignup(input);
+      res.status(201).json({ message: "Successfully joined the waiting list!", id: signup.id });
     } catch (err) {
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });

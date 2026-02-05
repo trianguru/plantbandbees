@@ -9,6 +9,7 @@ import ProductList from "@/pages/ProductList";
 import Cart from "@/pages/Cart";
 import Dashboard from "@/pages/Dashboard";
 import About from "@/pages/About";
+import WaitlistSuccess from "@/pages/WaitlistSuccess";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/cart" component={Cart} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/about" component={About} />
+      <Route path="/waitlist/success" component={WaitlistSuccess} />
       <Route component={NotFound} />
     </Switch>
   );

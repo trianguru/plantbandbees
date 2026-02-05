@@ -1,9 +1,10 @@
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Leaf, ShieldCheck, Truck, Star } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, Star, Sparkles } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductCard } from "@/components/ProductCard";
+import { WaitlistForm } from "@/components/WaitlistForm";
 
 export default function Home() {
   const { data: products, isLoading } = useProducts();
@@ -14,6 +15,51 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background font-sans">
       <Navigation />
+
+      {/* Waiting List Banner - Prominent Above Hero */}
+      <section id="waitlist" className="bg-gradient-to-br from-primary via-primary/95 to-accent text-primary-foreground py-4 md:py-6">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-center">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 md:w-6 md:h-6 animate-pulse" />
+              <span className="font-bold text-base md:text-lg">
+                Spring 2026 Launch - Join Our Waiting List!
+              </span>
+            </div>
+            <span className="text-sm md:text-base bg-white/20 px-3 py-1 rounded-full">
+              Get 20% Off First 3 Months
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Waiting List Form Section */}
+      <section className="py-12 md:py-16 bg-gradient-to-b from-secondary/20 to-background">
+        <div className="container px-4 md:px-6 max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 mb-4">
+              <Star className="w-4 h-4 fill-primary" />
+              <span>Join 50+ Knoxville Hosts Already on the List</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">
+              Be First to Transform Your Rental
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Get exclusive early access, priority installation, and 20% off your first 3 months when we launch Spring 2026.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8 border border-border/50">
+            <WaitlistForm source="organic" variant="inline" />
+          </div>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Questions? <Link href="/about" className="text-primary hover:underline font-medium">Learn more about PlantBandBees</Link>
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 md:pt-32 md:pb-48 overflow-hidden">
@@ -84,7 +130,7 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4">Why Choose GreenStay?</h2>
+            <h2 className="font-display text-4xl font-bold mb-4">Why Choose PlantBandBees?</h2>
             <p className="text-muted-foreground text-lg">We understand the unique needs of Knoxville hosts. Let us handle the greenery while you handle the guests.</p>
           </div>
 
@@ -162,10 +208,10 @@ export default function Home() {
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 font-display text-2xl font-bold mb-6">
                 <Leaf className="h-8 w-8 text-accent" />
-                Knoxville GreenStay
+                PlantBandBees
               </div>
               <p className="text-primary-foreground/80 max-w-md mb-8">
-                Bringing life to short-term rentals across East Tennessee. 
+                Bringing life to short-term rentals across East Tennessee.
                 Locally owned and operated in Knoxville.
               </p>
             </div>
@@ -189,7 +235,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center text-sm text-primary-foreground/60">
-            © {new Date().getFullYear()} Knoxville GreenStay. All rights reserved.
+            © {new Date().getFullYear()} PlantBandBees. All rights reserved.
           </div>
         </div>
       </footer>

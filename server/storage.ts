@@ -1,4 +1,4 @@
-import { products, subscriptions, orders, orderItems, type Product, type InsertProduct, type Subscription, type InsertSubscription, type Order, type InsertOrder, type OrderItem, type InsertOrderItem } from "@shared/schema";
+import { products, subscriptions, orders, orderItems, waitlistSignups, type Product, type InsertProduct, type Subscription, type InsertSubscription, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type WaitlistSignup, type InsertWaitlistSignup } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 import { authStorage, type IAuthStorage } from "./replit_integrations/auth/storage";
@@ -8,15 +8,19 @@ export interface IStorage extends IAuthStorage {
   getProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
-  
+
   // Subscriptions
   getSubscriptions(userId: string): Promise<(Subscription & { product: Product })[]>;
   createSubscription(subscription: InsertSubscription): Promise<Subscription>;
   cancelSubscription(id: number): Promise<Subscription | undefined>;
-  
+
   // Orders
   createOrder(order: InsertOrder, items: InsertOrderItem[]): Promise<Order>;
   getOrders(userId: string): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]>;
+
+  // Waitlist
+  createWaitlistSignup(signup: InsertWaitlistSignup): Promise<WaitlistSignup>;
+  getWaitlistSignups(): Promise<WaitlistSignup[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -87,7 +91,7 @@ export class DatabaseStorage implements IStorage {
 
   async getOrders(userId: string): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]> {
     const userOrders = await db.select().from(orders).where(eq(orders.userId, userId)).orderBy(desc(orders.createdAt));
-    
+
     const ordersWithItems = await Promise.all(userOrders.map(async (order) => {
       const items = await db.select({
         orderItem: orderItems,
@@ -96,7 +100,7 @@ export class DatabaseStorage implements IStorage {
       .from(orderItems)
       .innerJoin(products, eq(orderItems.productId, products.id))
       .where(eq(orderItems.orderId, order.id));
-      
+
       return {
         ...order,
         items: items.map(i => ({ ...i.orderItem, product: i.product })),
@@ -104,6 +108,16 @@ export class DatabaseStorage implements IStorage {
     }));
 
     return ordersWithItems;
+  }
+
+  // Waitlist
+  async createWaitlistSignup(signup: InsertWaitlistSignup): Promise<WaitlistSignup> {
+    const [newSignup] = await db.insert(waitlistSignups).values(signup).returning();
+    return newSignup;
+  }
+
+  async getWaitlistSignups(): Promise<WaitlistSignup[]> {
+    return await db.select().from(waitlistSignups).orderBy(desc(waitlistSignups.createdAt));
   }
 }
 

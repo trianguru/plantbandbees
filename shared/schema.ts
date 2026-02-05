@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 export * from "./models/auth";
 import { users } from "./models/auth";
@@ -42,6 +42,17 @@ export const orderItems = sqliteTable("order_items", {
   productId: integer("product_id").notNull().references(() => products.id),
   quantity: integer("quantity").notNull(),
   priceAtPurchase: text("price_at_purchase").notNull(),
+});
+
+export const waitlistSignups = sqliteTable("waitlist_signups", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
+  phone: text("phone"),
+  propertyCount: integer("property_count"),
+  serviceInterest: text("service_interest"), // 'one-time' | 'subscription' | 'both'
+  source: text("source"), // 'google-ad' | 'facebook-ad' | 'instagram-ad' | 'organic'
+  createdAt: integer("created_at", { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
 // Relations
@@ -85,6 +96,7 @@ export const insertProductSchema = createInsertSchema(products).omit({ id: true 
 export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({ id: true, startDate: true });
 export const insertOrderSchema = createInsertSchema(orders).omit({ id: true, createdAt: true });
 export const insertOrderItemSchema = createInsertSchema(orderItems).omit({ id: true });
+export const insertWaitlistSchema = createInsertSchema(waitlistSignups).omit({ id: true, createdAt: true });
 
 // Types
 export type Product = typeof products.$inferSelect;
@@ -95,3 +107,5 @@ export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
+export type WaitlistSignup = typeof waitlistSignups.$inferSelect;
+export type InsertWaitlistSignup = z.infer<typeof insertWaitlistSchema>;

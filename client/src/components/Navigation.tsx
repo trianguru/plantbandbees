@@ -18,7 +18,7 @@ export function Navigation() {
   const links = [
     { href: "/products", label: "Shop Plants" },
     { href: "/subscriptions", label: "Subscriptions" },
-    { href: "/about", label: "Why Knoxville GreenStay" },
+    { href: "/about", label: "Why PlantBandBees" },
   ];
 
   return (
@@ -28,7 +28,7 @@ export function Navigation() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold text-primary tracking-tight hover:opacity-80 transition-opacity">
           <Leaf className="h-6 w-6 text-primary fill-primary/20" />
-          Knoxville GreenStay
+          PlantBandBees
         </Link>
 
         {/* Desktop Navigation */}
