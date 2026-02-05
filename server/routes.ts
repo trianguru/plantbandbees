@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, attachUserToRequest } from "./replit_integrations/auth";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import { addToWaitlist } from "./lib/mailchimp";
 
 async function seedDatabase() {
   const products = await storage.getProducts();
@@ -183,7 +184,23 @@ export async function registerRoutes(
   app.post(api.waitlist.create.path, async (req, res) => {
     try {
       const input = api.waitlist.create.input.parse(req.body);
+
+      // Save to database
       const signup = await storage.createWaitlistSignup(input);
+
+      // Add to Mailchimp (async, don't block response)
+      addToWaitlist({
+        email: input.email,
+        name: input.name,
+        phone: input.phone,
+        propertyCount: input.propertyCount,
+        serviceInterest: input.serviceInterest,
+        source: input.source,
+      }).catch(error => {
+        console.error("Failed to add to Mailchimp:", error);
+        // Don't fail the request if Mailchimp fails
+      });
+
       res.status(201).json({ message: "Successfully joined the waiting list!", id: signup.id });
     } catch (err) {
       if (err instanceof z.ZodError) {

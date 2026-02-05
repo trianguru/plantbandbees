@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { trackWaitlistSignup, trackFormStart } from "@/lib/analytics";
 
 const waitlistSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -68,6 +69,13 @@ export function WaitlistForm({ source = "organic", onSuccess, variant = "inline"
       }
 
       const result = await response.json();
+
+      // Track conversion
+      trackWaitlistSignup({
+        email: data.email,
+        source: data.source,
+        propertyCount: data.propertyCount,
+      });
 
       reset();
 
