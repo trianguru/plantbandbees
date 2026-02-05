@@ -1,0 +1,198 @@
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import { Leaf, ShieldCheck, Truck, Star } from "lucide-react";
+import { useProducts } from "@/hooks/use-products";
+import { ProductCard } from "@/components/ProductCard";
+
+export default function Home() {
+  const { data: products, isLoading } = useProducts();
+
+  // Filter for featured items
+  const featuredSubscriptions = products?.filter(p => p.type === 'subscription_tier').slice(0, 3);
+
+  return (
+    <div className="min-h-screen bg-background font-sans">
+      <Navigation />
+
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-32 md:pt-32 md:pb-48 overflow-hidden">
+        <div className="container px-4 md:px-6 relative z-10 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8 animate-in slide-in-from-left-8 fade-in duration-700">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+                <Leaf className="w-4 h-4" />
+                <span>Exclusively for Knoxville Airbnb Hosts</span>
+              </div>
+              
+              <h1 className="font-display text-5xl md:text-7xl font-bold leading-[1.1] text-foreground">
+                Local Roots, <br />
+                <span className="text-primary italic">Global Guests</span>
+              </h1>
+              
+              <p className="text-xl text-muted-foreground max-w-lg leading-relaxed">
+                Premium, maintenance-free plant subscriptions designed for your short-term rentals. We water, feed, and replace—so you don't have to.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/subscriptions">
+                  <Button size="lg" className="h-14 px-8 text-lg bg-primary hover:bg-primary/90 shadow-xl shadow-primary/25 rounded-xl">
+                    View Subscriptions
+                  </Button>
+                </Link>
+                <Link href="/products">
+                  <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-2 hover:bg-secondary/50 rounded-xl">
+                    Shop One-Time
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative animate-in slide-in-from-right-8 fade-in duration-1000 delay-200">
+              {/* Decorative blob background */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-primary/20 to-accent/20 rounded-full blur-3xl opacity-60 -z-10" />
+              
+              {/* Hero Image */}
+              {/* Unsplash: Modern living room with plants */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                <img 
+                  src="https://images.unsplash.com/photo-1545241047-6083a3684587?q=80&w=1200&auto=format&fit=crop" 
+                  alt="Beautiful Airbnb living room with plants"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+
+              {/* Floating Card */}
+              <div className="absolute -bottom-8 -left-8 bg-white p-4 rounded-2xl shadow-xl border border-border/50 max-w-[200px] hidden md:block animate-bounce duration-[3000ms]">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex -space-x-2">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white overflow-hidden">
+                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-sm font-medium text-foreground">Trusted by 50+ local hosts</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-24 bg-white">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="font-display text-4xl font-bold mb-4">Why Choose GreenStay?</h2>
+            <p className="text-muted-foreground text-lg">We understand the unique needs of Knoxville hosts. Let us handle the greenery while you handle the guests.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <ShieldCheck className="w-10 h-10 text-primary" />,
+                title: "Zero Maintenance",
+                description: "Our team visits monthly to water, prune, and feed. If a plant looks sad, we swap it out for free."
+              },
+              {
+                icon: <Leaf className="w-10 h-10 text-accent" />,
+                title: "Tennessee Native Options",
+                description: "Showcase the beauty of the Smoky Mountains with our curated selection of hardy native plants."
+              },
+              {
+                icon: <Truck className="w-10 h-10 text-blue-500" />,
+                title: "Flexible Delivery",
+                description: "We coordinate with your turnover schedule to ensure we're in and out between guests."
+              }
+            ].map((feature, i) => (
+              <div key={i} className="p-8 rounded-2xl bg-secondary/30 hover:bg-secondary/50 transition-colors border border-transparent hover:border-primary/10">
+                <div className="mb-6 p-4 bg-white rounded-2xl w-fit shadow-sm text-primary">
+                  {feature.icon}
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-3">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Plans */}
+      <section className="py-24 bg-background">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="font-display text-4xl font-bold mb-2">Popular Subscriptions</h2>
+              <p className="text-muted-foreground">Plans tailored for every space size.</p>
+            </div>
+            <Link href="/subscriptions">
+              <Button variant="ghost" className="hidden md:flex gap-2">
+                View all plans <Leaf className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+
+          {isLoading ? (
+            <div className="grid md:grid-cols-3 gap-8">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="h-[400px] rounded-2xl bg-muted animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {featuredSubscriptions?.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+          
+          <div className="mt-8 md:hidden">
+             <Link href="/subscriptions">
+              <Button className="w-full" variant="outline">View all plans</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-primary text-primary-foreground py-16">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2 font-display text-2xl font-bold mb-6">
+                <Leaf className="h-8 w-8 text-accent" />
+                Knoxville GreenStay
+              </div>
+              <p className="text-primary-foreground/80 max-w-md mb-8">
+                Bringing life to short-term rentals across East Tennessee. 
+                Locally owned and operated in Knoxville.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-lg mb-4">Shop</h4>
+              <ul className="space-y-3">
+                <li><Link href="/subscriptions" className="hover:text-accent transition-colors">Subscriptions</Link></li>
+                <li><Link href="/products" className="hover:text-accent transition-colors">One-Time Purchase</Link></li>
+                <li><Link href="/gifts" className="hover:text-accent transition-colors">Guest Gifts</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-bold text-lg mb-4">Company</h4>
+              <ul className="space-y-3">
+                <li><Link href="/about" className="hover:text-accent transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-accent transition-colors">Contact</Link></li>
+                <li><Link href="/api/login" className="hover:text-accent transition-colors">Host Login</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center text-sm text-primary-foreground/60">
+            © {new Date().getFullYear()} Knoxville GreenStay. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

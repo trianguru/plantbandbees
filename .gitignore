@@ -1,0 +1,19 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+
+# Local database
+data.db
+data.db-wal
+data.db-shm
+
+# Environment files
+.env
+.env.local
+
+# Replit files
+.replit
+.local/
