@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, serial, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations, sql } from "drizzle-orm";
@@ -6,8 +6,8 @@ import { relations, sql } from "drizzle-orm";
 export * from "./models/auth";
 import { users } from "./models/auth";
 
-export const products = sqliteTable("products", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
   type: text("type").notNull(), // 'subscription_tier' | 'one_time_purchase'
@@ -16,43 +16,43 @@ export const products = sqliteTable("products", {
   stock: integer("stock").default(0),
   maintenanceLevel: text("maintenance_level"), // 'low', 'medium', 'high'
   sunlightNeeds: text("sunlight_needs"), // 'low', 'partial', 'direct'
-  isNative: integer("is_native", { mode: "boolean" }).default(false),
+  isNative: boolean("is_native").default(false),
 });
 
-export const subscriptions = sqliteTable("subscriptions", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const subscriptions = pgTable("subscriptions", {
+  id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id),
   productId: integer("product_id").notNull().references(() => products.id),
   status: text("status").notNull().default("active"), // 'active', 'cancelled', 'past_due'
-  startDate: integer("start_date", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  nextBillingDate: integer("next_billing_date", { mode: "timestamp" }),
+  startDate: timestamp("start_date").defaultNow(),
+  nextBillingDate: timestamp("next_billing_date"),
 });
 
-export const orders = sqliteTable("orders", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id),
   totalAmount: text("total_amount").notNull(),
   status: text("status").notNull().default("pending"), // 'pending', 'paid', 'delivered'
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const orderItems = sqliteTable("order_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
   orderId: integer("order_id").notNull().references(() => orders.id),
   productId: integer("product_id").notNull().references(() => products.id),
   quantity: integer("quantity").notNull(),
   priceAtPurchase: text("price_at_purchase").notNull(),
 });
 
-export const waitlistSignups = sqliteTable("waitlist_signups", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const waitlistSignups = pgTable("waitlist_signups", {
+  id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   phone: text("phone"),
   propertyCount: integer("property_count"),
   serviceInterest: text("service_interest"), // 'one-time' | 'subscription' | 'both'
   source: text("source"), // 'google-ad' | 'facebook-ad' | 'instagram-ad' | 'organic'
-  createdAt: integer("created_at", { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Relations

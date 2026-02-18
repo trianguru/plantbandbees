@@ -1,21 +1,21 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // Session storage table for express-session
-export const sessions = sqliteTable("sessions", {
+export const sessions = pgTable("sessions", {
   sid: text("sid").primaryKey(),
   sess: text("sess").notNull(),
-  expire: integer("expire", { mode: "timestamp" }).notNull(),
+  expire: timestamp("expire").notNull(),
 });
 
 // User storage table
-export const users = sqliteTable("users", {
+export const users = pgTable("users", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   email: text("email").unique(),
   firstName: text("first_name"),
   lastName: text("last_name"),
   profileImageUrl: text("profile_image_url"),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export type UpsertUser = typeof users.$inferInsert;
