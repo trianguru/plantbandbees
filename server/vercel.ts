@@ -1,3 +1,9 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+// ESM shim for __dirname (not available in ES modules)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 import express from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
