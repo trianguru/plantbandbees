@@ -62,8 +62,7 @@ async function buildAll() {
   });
 
   // Build Vercel serverless entry point
-  // ESM format to support top-level await, with all packages external
-  // so @vercel/node resolves node_modules itself (avoids dynamic require issues)
+  // ESM format, all packages external, __dirname/__filename shimmed for ESM
   console.log("building vercel entry...");
   await esbuild({
     entryPoints: ["server/vercel.ts"],
@@ -73,6 +72,9 @@ async function buildAll() {
     outfile: "dist/vercel.js",
     define: {
       "process.env.NODE_ENV": '"production"',
+      // Shim CJS globals for ESM context
+      "__dirname": "new URL('.', import.meta.url).pathname.replace(/\\/$/, '')",
+      "__filename": "new URL(import.meta.url).pathname",
     },
     minify: false,
     packages: "external",
