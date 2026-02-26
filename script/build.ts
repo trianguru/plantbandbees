@@ -46,7 +46,7 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
-  // Build main server
+  // Build main server (CJS for node runtime)
   await esbuild({
     entryPoints: ["server/index.ts"],
     platform: "node",
@@ -61,19 +61,21 @@ async function buildAll() {
     logLevel: "info",
   });
 
-  // Build Vercel serverless entry point - CJS format to support Node built-ins
+  // Build Vercel serverless entry point
+  // ESM format to support top-level await, with all packages external
+  // so @vercel/node resolves node_modules itself (avoids dynamic require issues)
   console.log("building vercel entry...");
   await esbuild({
     entryPoints: ["server/vercel.ts"],
     platform: "node",
     bundle: true,
-    format: "cjs",
+    format: "esm",
     outfile: "dist/vercel.js",
     define: {
       "process.env.NODE_ENV": '"production"',
     },
     minify: false,
-    external: externals,
+    packages: "external",
     logLevel: "info",
   });
 }
