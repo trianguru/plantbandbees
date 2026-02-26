@@ -61,13 +61,13 @@ async function buildAll() {
     logLevel: "info",
   });
 
-  // Build Vercel serverless entry point
+  // Build Vercel serverless entry point - CJS format to support Node built-ins
   console.log("building vercel entry...");
   await esbuild({
     entryPoints: ["server/vercel.ts"],
     platform: "node",
     bundle: true,
-    format: "esm",
+    format: "cjs",
     outfile: "dist/vercel.js",
     define: {
       "process.env.NODE_ENV": '"production"',
