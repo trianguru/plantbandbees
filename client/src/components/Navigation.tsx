@@ -1,8 +1,8 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Leaf, Menu, ShoppingBag, User as UserIcon, X } from "lucide-react";
-import { useState } from "react";
+import { Leaf, Menu, ShoppingBag, Moon, Sun } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,24 @@ export function Navigation() {
   const { user, logout } = useAuth();
   const { items } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Dark mode — persists across sessions via localStorage
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("theme") === "dark" ||
+      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -28,14 +46,14 @@ export function Navigation() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold text-primary tracking-tight hover:opacity-80 transition-opacity">
           <Leaf className="h-6 w-6 text-primary fill-primary/20" />
-          PlantBandBees
+          PlantB & Bees
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
-            <Link 
-              key={link.href} 
+            <Link
+              key={link.href}
               href={link.href}
               className={`text-sm font-medium transition-colors hover:text-primary ${
                 location === link.href ? "text-primary" : "text-muted-foreground"
@@ -47,7 +65,23 @@ export function Navigation() {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
+
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={() => setIsDark(!isDark)}
+            aria-label="Toggle dark mode"
+            className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </button>
+
+          {/* Cart */}
           <Link href="/cart" className="relative p-2 hover:bg-secondary rounded-full transition-colors">
             <ShoppingBag className="h-5 w-5 text-foreground" />
             {cartCount > 0 && (
@@ -62,9 +96,9 @@ export function Navigation() {
               <Link href="/dashboard" className="text-sm font-medium hover:text-primary">
                 My Dashboard
               </Link>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => logout()}
                 className="border-primary/20 hover:bg-primary/5 hover:text-primary"
               >
@@ -91,8 +125,8 @@ export function Navigation() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <div className="flex flex-col gap-6 mt-8">
                 {links.map((link) => (
-                  <Link 
-                    key={link.href} 
+                  <Link
+                    key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-lg font-medium hover:text-primary transition-colors"
@@ -100,6 +134,15 @@ export function Navigation() {
                     {link.label}
                   </Link>
                 ))}
+                <div className="h-px bg-border my-2" />
+                {/* Dark mode toggle in mobile menu too */}
+                <button
+                  onClick={() => { setIsDark(!isDark); setMobileMenuOpen(false); }}
+                  className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors text-left"
+                >
+                  {isDark ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5" />}
+                  {isDark ? "Light Mode" : "Dark Mode"}
+                </button>
                 <div className="h-px bg-border my-2" />
                 {user ? (
                   <>
