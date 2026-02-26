@@ -4,10 +4,22 @@ import { Link } from "wouter";
 import { Leaf, ShieldCheck, Truck, Star, Sparkles } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductCard } from "@/components/ProductCard";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { data: products, isLoading } = useProducts();
   const featuredSubscriptions = products?.filter(p => p.type === 'subscription_tier').slice(0, 3);
+
+  // Sticky reminder banner — shows after user scrolls past hero
+  const [showStickyReminder, setShowStickyReminder] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyReminder(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -32,6 +44,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* STICKY BOTTOM REMINDER BANNER — appears after scrolling */}
+      {showStickyReminder && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#1a3a17] text-white py-3 px-4 shadow-2xl border-t-2 border-yellow-400 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center animate-in slide-in-from-bottom-2 duration-300">
+          <span className="text-sm md:text-base font-semibold">
+            🐝 Don't leave before signing up on our waitlist at the bottom!
+          </span>
+          <a
+            href="#google-waitlist-form"
+            className="text-sm bg-yellow-400 text-green-900 font-bold px-4 py-1.5 rounded-full hover:bg-yellow-300 transition-colors whitespace-nowrap"
+          >
+            Take me there ↓
+          </a>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 md:pt-32 md:pb-48 overflow-hidden">
