@@ -12,7 +12,7 @@ const plants = [
   { id: 9, name: 'Orchid', category: 'Orchids', image: 'https://images.unsplash.com/photo-1566842600175-97dca3c5ad8e?w=400', description: 'Natures luxury. Exotic blooms with arching sprays lasting weeks to months.', care: 'Bright indirect light. Weekly watering.', toxicToDogs: false, tags: ['flowering', 'luxury', 'dog-safe'] },
   { id: 10, name: 'Air Plant', category: 'Air Plants', image: 'https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400', description: 'Magical plants requiring no soil. Display on driftwood or in glass orbs.', care: 'Bright indirect light. Soak 2-3x weekly.', toxicToDogs: false, tags: ['no-soil', 'dog-safe'] },
   { id: 11, name: 'Jade Plant', category: 'Succulents', image: 'https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=400', description: 'Sculptural succulents with thick glossy jade-green leaves. Bonsai-like quality.', care: 'Very bright light. Let soil dry completely.', toxicToDogs: true, tags: ['succulent', 'sculptural'] },
-  { id: 12, name: 'Corn Plant (Dracaena)', category: 'Foliage', image: 'https://images.unsplash.com/photo-1601985705806-5b9a10234c27?w=400', description: 'Tall architectural plants with corn-like leaves striped in gold or cream.', care: 'Low to bright indirect light. Water when dry.', toxicToDogs: true, tags: ['tall', 'architectural'] },
+  { id: 12, name: 'Corn Plant', category: 'Foliage', image: 'https://images.unsplash.com/photo-1601985705806-5b9a10234c27?w=400', description: 'Tall architectural plants with corn-like leaves striped in gold or cream.', care: 'Low to bright indirect light. Water when dry.', toxicToDogs: true, tags: ['tall', 'architectural'] },
   { id: 13, name: 'Schefflera', category: 'Trees', image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400', description: 'Tall tree-like plants with glossy umbrella-shaped leaflets. Instant tropical architecture.', care: 'Bright indirect light. Let soil dry between waterings.', toxicToDogs: true, tags: ['tall', 'tree-form'] },
   { id: 14, name: 'Aloe Vera', category: 'Succulents', image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400', description: 'Natures medicine cabinet. Sculptural rosettes of fleshy spiky leaves with soothing gel.', care: 'Very bright light. Water every 2-3 weeks.', toxicToDogs: true, tags: ['succulent', 'medicinal'] },
   { id: 15, name: 'Swedish Ivy', category: 'Trailing', image: 'https://images.unsplash.com/photo-1598880940080-ff9a29891b85?w=400', description: 'Charming trailing plant with soft rounded green leaves and purple undersides.', care: 'Bright indirect light. Keep consistently moist.', toxicToDogs: false, tags: ['trailing', 'dog-safe'] },
@@ -25,13 +25,16 @@ export default function Catalogue() {
   const [dogSafeOnly, setDogSafeOnly] = useState(false);
   const [selectedPlants, setSelectedPlants] = useState([]);
   const [search, setSearch] = useState('');
+
   const filtered = plants.filter(p => {
     const matchCat = selectedCategory === 'All' || p.category === selectedCategory;
     const matchDog = !dogSafeOnly || !p.toxicToDogs;
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchDog && matchSearch;
   });
+
   const toggleSelect = (id) => setSelectedPlants(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+
   return (
     <div style={{ minHeight:'100vh', background:'#f8faf5', padding:'2rem' }}>
       <div style={{ textAlign:'center', padding:'3rem 0 2rem' }}>
