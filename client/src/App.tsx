@@ -10,12 +10,14 @@ import Cart from "@/pages/Cart";
 import Dashboard from "@/pages/Dashboard";
 import About from "@/pages/About";
 import Catalogue from "@/pages/Catalogue";
+import Auth from "@/pages/Auth";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/catalogue" component={Catalogue} />
+      <Route path="/auth" component={Auth} />
       <Route path="/products" component={ProductList} />
       <Route path="/subscriptions" component={ProductList} />
       <Route path="/cart" component={Cart} />
