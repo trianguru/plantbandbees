@@ -17,6 +17,7 @@ export const users = pgTable("users", {
   hashedPassword: text("hashed_password"),
   newsletterOptedIn: boolean("newsletter_opted_in").default(false),
   stripeCustomerId: text("stripe_customer_id"),
+  referralCode: text("referral_code").unique(),
   resetToken: text("reset_token"),
   resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").defaultNow(),

@@ -25,6 +25,10 @@ const loginSchema = z.object({
 
 const SALT_ROUNDS = 10;
 
+function generateReferralCode(): string {
+  return crypto.randomBytes(4).toString("hex").toUpperCase(); // e.g. "A3F9C12B"
+}
+
 // Register auth-specific routes
 export function registerAuthRoutes(app: Express): void {
   // Get current authenticated user
@@ -69,6 +73,7 @@ export function registerAuthRoutes(app: Express): void {
         lastName,
         hashedPassword,
         newsletterOptedIn: newsletterOptIn,
+        referralCode: generateReferralCode(),
       });
 
       req.session.userId = user.id;
@@ -266,6 +271,30 @@ export function registerAuthRoutes(app: Express): void {
       }
       console.error("Reset password error:", error);
       res.status(500).json({ message: "Failed to reset password" });
+    }
+  });
+
+  // Get referral link for the logged-in user
+  app.get("/api/auth/referral-link", async (req: any, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      const user = await authStorage.getUser(req.session.userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      // Generate a code if the user somehow doesn't have one yet
+      let code = user.referralCode;
+      if (!code) {
+        code = generateReferralCode();
+        await authStorage.upsertUser({ ...user, referralCode: code });
+      }
+
+      const baseUrl = process.env.APP_URL ?? "https://plantbandbees.com";
+      res.json({ code, url: `${baseUrl}/?ref=${code}` });
+    } catch (error) {
+      console.error("Referral link error:", error);
+      res.status(500).json({ message: "Failed to get referral link" });
     }
   });
 }

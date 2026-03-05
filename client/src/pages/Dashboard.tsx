@@ -6,7 +6,7 @@ import { useSubscriptions, useCancelSubscription } from "@/hooks/use-subscriptio
 import { useOrders } from "@/hooks/use-orders";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Package, Calendar, AlertCircle, CreditCard, Receipt, ExternalLink } from "lucide-react";
+import { Loader2, Package, Calendar, AlertCircle, CreditCard, Receipt, ExternalLink, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
 
@@ -32,12 +32,34 @@ function useInvoices() {
   });
 }
 
+function useReferralLink() {
+  return useQuery<{ code: string; url: string }>({
+    queryKey: ["/api/auth/referral-link"],
+    queryFn: async () => {
+      const res = await fetch("/api/auth/referral-link", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch referral link");
+      return res.json();
+    },
+    staleTime: Infinity,
+  });
+}
+
 export default function Dashboard() {
   const { user, isLoading: authLoading } = useAuth();
   const { data: subscriptions, isLoading: subsLoading } = useSubscriptions();
   const { data: orders, isLoading: ordersLoading } = useOrders();
   const { data: invoices, isLoading: invoicesLoading } = useInvoices();
+  const { data: referral } = useReferralLink();
   const { mutate: cancelSubscription } = useCancelSubscription();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyReferral = () => {
+    if (!referral) return;
+    navigator.clipboard.writeText(referral.url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
   const { toast } = useToast();
   const [location, setLocation] = useLocation();
   const [portalPending, setPortalPending] = useState(false);
@@ -297,15 +319,33 @@ export default function Dashboard() {
               <p className="text-sm text-muted-foreground mb-4">
                 Have a sick plant or need to reschedule maintenance?
               </p>
-              <Button variant="outline" className="w-full">Contact Support</Button>
+              <a
+                href={`mailto:support@plantbandbees.com?subject=Support%20Request%20-%20${encodeURIComponent(user.firstName ?? 'Host')}&body=Hi%20Plant%20Band%20Bees%20team%2C%0A%0A`}
+                className="block"
+              >
+                <Button variant="outline" className="w-full">Contact Support</Button>
+              </a>
             </div>
-            
+
             <div className="bg-accent/10 rounded-2xl p-6 border border-accent/20">
               <h3 className="font-bold text-accent-foreground mb-2">Refer a Host</h3>
-              <p className="text-sm text-accent-foreground/80 mb-4">
+              <p className="text-sm text-accent-foreground/80 mb-3">
                 Get a free month of maintenance when you refer another Knoxville Airbnb host.
               </p>
-              <Button className="w-full bg-accent text-white hover:bg-accent/90">Get Referral Link</Button>
+              {referral && (
+                <p className="text-xs font-mono bg-white/60 rounded-lg px-3 py-2 mb-3 break-all text-accent-foreground/70">
+                  {referral.url}
+                </p>
+              )}
+              <Button
+                onClick={handleCopyReferral}
+                disabled={!referral}
+                className="w-full bg-accent text-white hover:bg-accent/90"
+              >
+                {copied
+                  ? <><Check className="w-4 h-4 mr-2" />Copied!</>
+                  : <><Copy className="w-4 h-4 mr-2" />Copy Referral Link</>}
+              </Button>
             </div>
           </div>
 
