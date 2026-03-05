@@ -7,6 +7,7 @@ const subscriptionSchema = z.object({
   userId: z.string(),
   productId: z.number(),
   status: z.enum(['active', 'cancelled', 'past_due']),
+  stripeSubscriptionId: z.string().nullable().optional(),
   startDate: z.string().nullable(), // timestamp as string
   nextBillingDate: z.string().nullable(),
   product: z.object({ // Joined relation

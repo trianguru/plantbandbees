@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptions, useCancelSubscription } from "@/hooks/use-subscriptions";
 import { useOrders } from "@/hooks/use-orders";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Package, Calendar, AlertCircle } from "lucide-react";
+import { Loader2, Package, Calendar, AlertCircle, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 export default function Dashboard() {
   const { user, isLoading: authLoading } = useAuth();
@@ -14,6 +15,33 @@ export default function Dashboard() {
   const { data: orders, isLoading: ordersLoading } = useOrders();
   const { mutate: cancelSubscription } = useCancelSubscription();
   const { toast } = useToast();
+  const [location, setLocation] = useLocation();
+  const [portalPending, setPortalPending] = useState(false);
+
+  // Handle Stripe return params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      toast({ title: "Subscription activated!", description: "Welcome to your new plant plan." });
+      setLocation("/dashboard");
+    } else if (params.get("checkout") === "cancelled") {
+      toast({ title: "Checkout cancelled", description: "No charges were made.", variant: "destructive" });
+      setLocation("/dashboard");
+    }
+  }, []);
+
+  const handleManageBilling = async () => {
+    try {
+      setPortalPending(true);
+      const res = await fetch("/api/stripe/portal", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to open billing portal");
+      const { url } = await res.json();
+      window.location.href = url;
+    } catch {
+      toast({ title: "Error", description: "Could not open billing portal.", variant: "destructive" });
+      setPortalPending(false);
+    }
+  };
 
   const handleCancel = (id: number) => {
     if (confirm("Are you sure you want to cancel this subscription?")) {
@@ -76,24 +104,40 @@ export default function Dashboard() {
                       
                       <div className="flex-grow">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-lg">Subscription #{sub.id}</h3>
-                          <Badge variant={sub.status === 'active' ? 'default' : 'secondary'}>
-                            {sub.status.toUpperCase()}
+                          <h3 className="font-bold text-lg">{sub.product?.name ?? `Subscription #${sub.id}`}</h3>
+                          <Badge variant={sub.status === 'active' ? 'default' : sub.status === 'past_due' ? 'destructive' : 'secondary'}>
+                            {sub.status.replace('_', ' ').toUpperCase()}
                           </Badge>
                         </div>
-                        <p className="text-muted-foreground text-sm mb-4">
-                          Started on: {new Date(sub.startDate!).toLocaleDateString()}
+                        <p className="text-muted-foreground text-sm">
+                          Started: {sub.startDate ? new Date(sub.startDate).toLocaleDateString() : '—'}
                         </p>
-                        
+                        {sub.nextBillingDate && sub.status === 'active' && (
+                          <p className="text-muted-foreground text-sm mb-4">
+                            Next billing: {new Date(sub.nextBillingDate).toLocaleDateString()}
+                          </p>
+                        )}
+
                         {sub.status === 'active' && (
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-destructive border-destructive/20 hover:bg-destructive/10"
-                            onClick={() => handleCancel(sub.id)}
-                          >
-                            Cancel Subscription
-                          </Button>
+                          <div className="flex gap-2 mt-4 flex-wrap">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={handleManageBilling}
+                              disabled={portalPending}
+                            >
+                              {portalPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <CreditCard className="w-3 h-3 mr-1" />}
+                              Manage Billing
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-destructive border-destructive/20 hover:bg-destructive/10"
+                              onClick={() => handleCancel(sub.id)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
                         )}
                       </div>
                     </div>

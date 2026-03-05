@@ -1,11 +1,11 @@
+import { useState } from "react";
 import { Product } from "@/hooks/use-products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
-import { useCreateSubscription } from "@/hooks/use-subscriptions";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { Droplets, Sun, Sparkles, ShoppingCart } from "lucide-react";
+import { Droplets, Sun, Loader2, ShoppingCart } from "lucide-react";
 import { useLocation } from "wouter";
 
 interface ProductCardProps {
@@ -14,10 +14,10 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
-  const { mutate: createSubscription, isPending } = useCreateSubscription();
   const { user } = useAuth();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
+  const [checkoutPending, setCheckoutPending] = useState(false);
 
   const handleAddToCart = () => {
     addItem({
@@ -33,32 +33,38 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (!user) {
       toast({
         title: "Login Required",
         description: "Please login to subscribe to a plan.",
         variant: "destructive",
       });
-      setLocation("/api/login");
+      setLocation("/auth");
       return;
     }
-    createSubscription(product.id, {
-      onSuccess: () => {
-        toast({
-          title: "Subscription Started!",
-          description: `You have successfully subscribed to ${product.name}.`,
-        });
-        setLocation("/dashboard");
-      },
-      onError: (err) => {
-        toast({
-          title: "Error",
-          description: err.message,
-          variant: "destructive",
-        });
-      },
-    });
+    try {
+      setCheckoutPending(true);
+      const res = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ productId: product.id }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to start checkout");
+      }
+      const { url } = await res.json();
+      window.location.href = url;
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message,
+        variant: "destructive",
+      });
+      setCheckoutPending(false);
+    }
   };
 
   return (
@@ -111,12 +117,12 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Action Button */}
         {product.type === 'subscription_tier' ? (
-          <Button 
-            onClick={handleSubscribe} 
-            disabled={isPending}
+          <Button
+            onClick={handleSubscribe}
+            disabled={checkoutPending}
             className="w-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
           >
-            {isPending ? "Starting..." : "Subscribe Now"}
+            {checkoutPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting...</> : "Subscribe Now"}
           </Button>
         ) : (
           <Button 
