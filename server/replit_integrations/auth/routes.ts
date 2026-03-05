@@ -1,8 +1,14 @@
 import type { Express } from "express";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { Resend } from "resend";
 import { authStorage } from "./storage";
 import { z } from "zod";
 import { subscribeToNewsletter, unsubscribeFromNewsletter } from "../../lib/mailchimp";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -181,6 +187,79 @@ export function registerAuthRoutes(app: Express): void {
       }
       console.error("Profile update error:", error);
       res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  // Forgot password — send reset email
+  app.post("/api/auth/forgot-password", async (req: any, res) => {
+    try {
+      const { email } = z.object({ email: z.string().email() }).parse(req.body);
+
+      const user = await authStorage.getUserByEmail(email);
+      // Always respond 200 to avoid leaking which emails exist
+      if (!user) {
+        return res.json({ message: "If that email exists, a reset link has been sent." });
+      }
+
+      const token = crypto.randomBytes(32).toString("hex");
+      const expiry = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+      await authStorage.setResetToken(user.id, token, expiry);
+
+      const baseUrl = process.env.APP_URL ?? "https://plantbandbees.com";
+      const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+
+      await resend.emails.send({
+        from: "Plant Band Bees <no-reply@plantbandbees.com>",
+        to: email,
+        subject: "Reset your Plant Band Bees password",
+        html: `
+          <p>Hi ${user.firstName ?? "there"},</p>
+          <p>Click the link below to reset your password. It expires in 1 hour.</p>
+          <p><a href="${resetUrl}">${resetUrl}</a></p>
+          <p>If you didn't request this, you can ignore this email.</p>
+        `,
+      });
+
+      res.json({ message: "If that email exists, a reset link has been sent." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0].message });
+      }
+      console.error("Forgot password error:", error);
+      res.status(500).json({ message: "Failed to send reset email" });
+    }
+  });
+
+  // Reset password — consume token, set new password
+  app.post("/api/auth/reset-password", async (req: any, res) => {
+    try {
+      const { token, password } = z
+        .object({
+          token: z.string().min(1),
+          password: z.string().min(8, "Password must be at least 8 characters"),
+        })
+        .parse(req.body);
+
+      const user = await authStorage.getUserByResetToken(token);
+      if (!user || !user.resetTokenExpiry) {
+        return res.status(400).json({ message: "Invalid or expired reset link" });
+      }
+
+      if (user.resetTokenExpiry < new Date()) {
+        return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+      await authStorage.setResetToken(user.id, null, null);
+      await authStorage.upsertUser({ ...user, hashedPassword });
+
+      res.json({ message: "Password updated successfully. You can now log in." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0].message });
+      }
+      console.error("Reset password error:", error);
+      res.status(500).json({ message: "Failed to reset password" });
     }
   });
 }

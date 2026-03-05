@@ -16,6 +16,8 @@ export const users = pgTable("users", {
   profileImageUrl: text("profile_image_url"),
   hashedPassword: text("hashed_password"),
   newsletterOptedIn: boolean("newsletter_opted_in").default(false),
+  resetToken: text("reset_token"),
+  resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

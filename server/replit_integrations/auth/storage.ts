@@ -8,8 +8,10 @@ export type UpdateUser = Pick<UpsertUser, "firstName" | "lastName" | "newsletter
 export interface IAuthStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByResetToken(token: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUser(id: string, data: UpdateUser): Promise<User | undefined>;
+  setResetToken(id: string, token: string | null, expiry: Date | null): Promise<void>;
 }
 
 class AuthStorage implements IAuthStorage {
@@ -21,6 +23,18 @@ class AuthStorage implements IAuthStorage {
   async getUserByEmail(email: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
+  }
+
+  async getUserByResetToken(token: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.resetToken, token));
+    return user;
+  }
+
+  async setResetToken(id: string, token: string | null, expiry: Date | null): Promise<void> {
+    await db
+      .update(users)
+      .set({ resetToken: token, resetTokenExpiry: expiry, updatedAt: new Date() })
+      .where(eq(users.id, id));
   }
 
   async updateUser(id: string, data: UpdateUser): Promise<User | undefined> {
