@@ -2,6 +2,11 @@ import type { Express, Request, Response } from "express";
 import Stripe from "stripe";
 import { storage } from "../storage";
 import { authStorage } from "../replit_integrations/auth/storage";
+import {
+  sendOrderConfirmationEmail,
+  sendSubscriptionCancelledEmail,
+  sendPaymentFailedEmail,
+} from "../lib/email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
   apiVersion: "2026-02-25.clover",
@@ -128,6 +133,16 @@ export function registerStripeRoutes(app: Express): void {
                   { userId, totalAmount: product.price, status: "paid" },
                   [{ productId: Number(productId), quantity: 1, priceAtPurchase: product.price }] as any
                 );
+                // Send order confirmation email async
+                const buyer = await authStorage.getUser(userId);
+                if (buyer?.email) {
+                  sendOrderConfirmationEmail(
+                    buyer.email,
+                    buyer.firstName ?? "there",
+                    product.name,
+                    product.price
+                  ).catch((err) => console.error("Order email error:", err));
+                }
               }
             }
             break;
@@ -143,6 +158,33 @@ export function registerStripeRoutes(app: Express): void {
           case "customer.subscription.deleted": {
             const sub = event.data.object as Stripe.Subscription;
             await storage.updateSubscriptionByStripeId(sub.id, { status: "cancelled" });
+            // Look up user by Stripe customer ID and send cancellation email
+            if (typeof sub.customer === "string") {
+              const customers = await stripe.customers.list({ limit: 1, email: undefined });
+              const customer = await stripe.customers.retrieve(sub.customer);
+              if (customer && !customer.deleted && customer.email) {
+                sendSubscriptionCancelledEmail(
+                  customer.email,
+                  (customer.name ?? "").split(" ")[0] || "there"
+                ).catch((err) => console.error("Cancellation email error:", err));
+              }
+            }
+            break;
+          }
+
+          case "invoice.payment_failed": {
+            const invoice = event.data.object as Stripe.Invoice;
+            if (typeof invoice.customer === "string" && invoice.amount_due) {
+              const customer = await stripe.customers.retrieve(invoice.customer);
+              if (customer && !customer.deleted && customer.email) {
+                const amount = (invoice.amount_due / 100).toFixed(2);
+                sendPaymentFailedEmail(
+                  customer.email,
+                  (customer.name ?? "").split(" ")[0] || "there",
+                  amount
+                ).catch((err) => console.error("Payment failed email error:", err));
+              }
+            }
             break;
           }
         }

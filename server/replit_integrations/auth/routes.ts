@@ -5,6 +5,7 @@ import { Resend } from "resend";
 import { authStorage } from "./storage";
 import { z } from "zod";
 import { subscribeToNewsletter, unsubscribeFromNewsletter } from "../../lib/mailchimp";
+import { sendWelcomeEmail } from "../../lib/email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -77,6 +78,11 @@ export function registerAuthRoutes(app: Express): void {
           else resolve();
         });
       });
+
+      // Fire welcome email async — don't block response
+      sendWelcomeEmail(email, firstName).catch((err) =>
+        console.error("Welcome email error:", err)
+      );
 
       const { hashedPassword: _, ...safeUser } = user;
       res.status(201).json({ message: "Account created successfully", user: safeUser });
