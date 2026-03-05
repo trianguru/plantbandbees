@@ -26,6 +26,7 @@ export interface IStorage extends IAuthStorage {
 export class DatabaseStorage implements IStorage {
   // Auth methods delegated to authStorage
   getUser = authStorage.getUser.bind(authStorage);
+  getUserByEmail = authStorage.getUserByEmail.bind(authStorage);
   upsertUser = authStorage.upsertUser.bind(authStorage);
 
   // Products
