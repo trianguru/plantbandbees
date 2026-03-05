@@ -2,11 +2,14 @@ import { users, type User, type UpsertUser } from "@shared/models/auth";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
 
+export type UpdateUser = Pick<UpsertUser, "firstName" | "lastName" | "newsletterOptedIn">;
+
 // Interface for auth storage operations
 export interface IAuthStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUser(id: string, data: UpdateUser): Promise<User | undefined>;
 }
 
 class AuthStorage implements IAuthStorage {
@@ -17,6 +20,15 @@ class AuthStorage implements IAuthStorage {
 
   async getUserByEmail(email: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async updateUser(id: string, data: UpdateUser): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
     return user;
   }
 

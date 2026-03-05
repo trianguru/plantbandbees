@@ -137,6 +137,94 @@ export async function triggerWelcomeEmail(email: string): Promise<void> {
 }
 
 /**
+ * Subscribe a registered user to the newsletter
+ */
+export async function subscribeToNewsletter(email: string, firstName: string, lastName: string): Promise<{ success: boolean; error?: string }> {
+  const apiKey = process.env.MAILCHIMP_API_KEY;
+  const serverPrefix = process.env.MAILCHIMP_SERVER_PREFIX;
+  const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
+
+  if (!apiKey || !serverPrefix || !audienceId) {
+    console.warn("Mailchimp not configured. Skipping newsletter subscription.");
+    return { success: false, error: "Mailchimp not configured" };
+  }
+
+  try {
+    const crypto = await import("crypto");
+    const subscriberHash = crypto.createHash("md5").update(email.toLowerCase()).digest("hex");
+    const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${audienceId}/members/${subscriberHash}`;
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        email_address: email,
+        status_if_new: "subscribed",
+        status: "subscribed",
+        merge_fields: { FNAME: firstName, LNAME: lastName },
+        tags: ["customer"],
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Mailchimp subscribe error:", errorData);
+      return { success: false, error: errorData.detail || "Failed to subscribe" };
+    }
+
+    console.log(`Subscribed ${email} to newsletter`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error subscribing to newsletter:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+/**
+ * Unsubscribe a registered user from the newsletter
+ */
+export async function unsubscribeFromNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
+  const apiKey = process.env.MAILCHIMP_API_KEY;
+  const serverPrefix = process.env.MAILCHIMP_SERVER_PREFIX;
+  const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
+
+  if (!apiKey || !serverPrefix || !audienceId) {
+    console.warn("Mailchimp not configured. Skipping newsletter unsubscription.");
+    return { success: false, error: "Mailchimp not configured" };
+  }
+
+  try {
+    const crypto = await import("crypto");
+    const subscriberHash = crypto.createHash("md5").update(email.toLowerCase()).digest("hex");
+    const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${audienceId}/members/${subscriberHash}`;
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({ status: "unsubscribed" }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Mailchimp unsubscribe error:", errorData);
+      return { success: false, error: errorData.detail || "Failed to unsubscribe" };
+    }
+
+    console.log(`Unsubscribed ${email} from newsletter`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error unsubscribing from newsletter:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+/**
  * Remove a subscriber from the waiting list
  */
 export async function removeFromWaitlist(email: string): Promise<{ success: boolean; error?: string }> {

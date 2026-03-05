@@ -28,6 +28,7 @@ export class DatabaseStorage implements IStorage {
   getUser = authStorage.getUser.bind(authStorage);
   getUserByEmail = authStorage.getUserByEmail.bind(authStorage);
   upsertUser = authStorage.upsertUser.bind(authStorage);
+  updateUser = authStorage.updateUser.bind(authStorage);
 
   // Products
   async getProducts(): Promise<Product[]> {

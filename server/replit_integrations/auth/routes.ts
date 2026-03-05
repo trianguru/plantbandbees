@@ -2,6 +2,7 @@ import type { Express } from "express";
 import bcrypt from "bcrypt";
 import { authStorage } from "./storage";
 import { z } from "zod";
+import { subscribeToNewsletter, unsubscribeFromNewsletter } from "../../lib/mailchimp";
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -126,5 +127,60 @@ export function registerAuthRoutes(app: Express): void {
       res.clearCookie("connect.sid");
       res.json({ message: "Logged out successfully" });
     });
+  });
+
+  // Update profile
+  app.patch("/api/auth/user", async (req: any, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const updateSchema = z.object({
+        firstName: z.string().min(1).optional(),
+        lastName: z.string().optional(),
+        newsletterOptedIn: z.boolean().optional(),
+      });
+
+      const updates = updateSchema.parse(req.body);
+
+      const currentUser = await authStorage.getUser(req.session.userId);
+      if (!currentUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const updatedUser = await authStorage.updateUser(req.session.userId, updates);
+      if (!updatedUser) {
+        return res.status(500).json({ message: "Failed to update profile" });
+      }
+
+      // Sync newsletter preference with Mailchimp if it changed
+      if (
+        updates.newsletterOptedIn !== undefined &&
+        updates.newsletterOptedIn !== currentUser.newsletterOptedIn &&
+        currentUser.email
+      ) {
+        const firstName = updatedUser.firstName ?? "";
+        const lastName = updatedUser.lastName ?? "";
+        if (updates.newsletterOptedIn) {
+          subscribeToNewsletter(currentUser.email, firstName, lastName).catch((err) =>
+            console.error("Mailchimp subscribe error:", err)
+          );
+        } else {
+          unsubscribeFromNewsletter(currentUser.email).catch((err) =>
+            console.error("Mailchimp unsubscribe error:", err)
+          );
+        }
+      }
+
+      const { hashedPassword: _, ...safeUser } = updatedUser;
+      res.json({ message: "Profile updated", user: safeUser });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0].message });
+      }
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
   });
 }
