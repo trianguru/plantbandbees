@@ -24,6 +24,7 @@ export const subscriptions = pgTable("subscriptions", {
   userId: text("user_id").notNull().references(() => users.id),
   productId: integer("product_id").notNull().references(() => products.id),
   status: text("status").notNull().default("active"), // 'active', 'cancelled', 'past_due'
+  stripeSubscriptionId: text("stripe_subscription_id"),
   startDate: timestamp("start_date").defaultNow(),
   nextBillingDate: timestamp("next_billing_date"),
 });

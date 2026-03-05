@@ -21,6 +21,10 @@ export interface IStorage extends IAuthStorage {
   // Waitlist
   createWaitlistSignup(signup: InsertWaitlistSignup): Promise<WaitlistSignup>;
   getWaitlistSignups(): Promise<WaitlistSignup[]>;
+
+  // Stripe helpers
+  getSubscriptionByStripeId(stripeSubId: string): Promise<Subscription | undefined>;
+  updateSubscriptionByStripeId(stripeSubId: string, data: Partial<InsertSubscription>): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -31,6 +35,7 @@ export class DatabaseStorage implements IStorage {
   upsertUser = authStorage.upsertUser.bind(authStorage);
   updateUser = authStorage.updateUser.bind(authStorage);
   setResetToken = authStorage.setResetToken.bind(authStorage);
+  setStripeCustomerId = authStorage.setStripeCustomerId.bind(authStorage);
 
   // Products
   async getProducts(): Promise<Product[]> {
@@ -122,6 +127,15 @@ export class DatabaseStorage implements IStorage {
 
   async getWaitlistSignups(): Promise<WaitlistSignup[]> {
     return await db.select().from(waitlistSignups).orderBy(desc(waitlistSignups.createdAt));
+  }
+
+  async getSubscriptionByStripeId(stripeSubId: string): Promise<Subscription | undefined> {
+    const [sub] = await db.select().from(subscriptions).where(eq(subscriptions.stripeSubscriptionId, stripeSubId));
+    return sub;
+  }
+
+  async updateSubscriptionByStripeId(stripeSubId: string, data: Partial<InsertSubscription>): Promise<void> {
+    await db.update(subscriptions).set(data).where(eq(subscriptions.stripeSubscriptionId, stripeSubId));
   }
 }
 

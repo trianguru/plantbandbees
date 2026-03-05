@@ -12,6 +12,7 @@ export interface IAuthStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   updateUser(id: string, data: UpdateUser): Promise<User | undefined>;
   setResetToken(id: string, token: string | null, expiry: Date | null): Promise<void>;
+  setStripeCustomerId(id: string, customerId: string): Promise<void>;
 }
 
 class AuthStorage implements IAuthStorage {
@@ -34,6 +35,13 @@ class AuthStorage implements IAuthStorage {
     await db
       .update(users)
       .set({ resetToken: token, resetTokenExpiry: expiry, updatedAt: new Date() })
+      .where(eq(users.id, id));
+  }
+
+  async setStripeCustomerId(id: string, customerId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ stripeCustomerId: customerId, updatedAt: new Date() })
       .where(eq(users.id, id));
   }
 

@@ -1,7 +1,9 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, attachUserToRequest } from "./replit_integrations/auth";
+import { registerStripeRoutes } from "./routes/stripe";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { addToWaitlist } from "./lib/mailchimp";
@@ -78,10 +80,14 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // Raw body parser for Stripe webhook (must come before JSON middleware)
+  app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));
+
   // Setup Auth FIRST
   await setupAuth(app);
   attachUserToRequest(app);
   registerAuthRoutes(app);
+  registerStripeRoutes(app);
 
   // Seed Data
   seedDatabase().catch(console.error);
