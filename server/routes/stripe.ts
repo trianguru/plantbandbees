@@ -155,6 +155,41 @@ export function registerStripeRoutes(app: Express): void {
     }
   );
 
+  // GET /api/stripe/invoices
+  // Returns the last 24 Stripe invoices for the logged-in user
+  app.get("/api/stripe/invoices", async (req: any, res: Response) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const user = await authStorage.getUser(req.session.userId);
+      if (!user?.stripeCustomerId) {
+        return res.json([]);
+      }
+
+      const invoices = await stripe.invoices.list({
+        customer: user.stripeCustomerId,
+        limit: 24,
+      });
+
+      const result = invoices.data.map((inv) => ({
+        id: inv.id,
+        date: inv.created,
+        amount: inv.amount_paid / 100,
+        currency: inv.currency,
+        status: inv.status,
+        hostedInvoiceUrl: inv.hosted_invoice_url,
+        description: inv.lines.data[0]?.description ?? null,
+      }));
+
+      res.json(result);
+    } catch (error) {
+      console.error("Stripe invoices error:", error);
+      res.status(500).json({ message: "Failed to fetch invoices" });
+    }
+  });
+
   // GET /api/stripe/portal
   // Creates a Stripe Billing Portal session for the logged-in user
   app.get("/api/stripe/portal", async (req: any, res: Response) => {

@@ -1,18 +1,42 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptions, useCancelSubscription } from "@/hooks/use-subscriptions";
 import { useOrders } from "@/hooks/use-orders";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Package, Calendar, AlertCircle, CreditCard } from "lucide-react";
+import { Loader2, Package, Calendar, AlertCircle, CreditCard, Receipt, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
+
+interface Invoice {
+  id: string;
+  date: number;
+  amount: number;
+  currency: string;
+  status: string | null;
+  hostedInvoiceUrl: string | null;
+  description: string | null;
+}
+
+function useInvoices() {
+  return useQuery<Invoice[]>({
+    queryKey: ["/api/stripe/invoices"],
+    queryFn: async () => {
+      const res = await fetch("/api/stripe/invoices", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+}
 
 export default function Dashboard() {
   const { user, isLoading: authLoading } = useAuth();
   const { data: subscriptions, isLoading: subsLoading } = useSubscriptions();
   const { data: orders, isLoading: ordersLoading } = useOrders();
+  const { data: invoices, isLoading: invoicesLoading } = useInvoices();
   const { mutate: cancelSubscription } = useCancelSubscription();
   const { toast } = useToast();
   const [location, setLocation] = useLocation();
@@ -56,7 +80,7 @@ export default function Dashboard() {
     }
   };
 
-  if (authLoading || subsLoading || ordersLoading) {
+  if (authLoading || subsLoading || ordersLoading || invoicesLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -191,6 +215,71 @@ export default function Dashboard() {
                 ) : (
                   <div className="p-8 text-center text-muted-foreground">
                     No past orders found.
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Billing History */}
+            <section>
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Receipt className="w-5 h-5 text-accent" />
+                Billing History
+              </h2>
+
+              <div className="bg-white rounded-2xl border border-border overflow-hidden">
+                {invoices && invoices.length > 0 ? (
+                  <table className="w-full text-sm">
+                    <thead className="bg-secondary/30">
+                      <tr>
+                        <th className="p-4 text-left font-medium">Date</th>
+                        <th className="p-4 text-left font-medium">Description</th>
+                        <th className="p-4 text-left font-medium">Status</th>
+                        <th className="p-4 text-right font-medium">Amount</th>
+                        <th className="p-4 text-right font-medium">Receipt</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/50">
+                      {invoices.map(inv => (
+                        <tr key={inv.id} className="hover:bg-secondary/10">
+                          <td className="p-4 text-muted-foreground whitespace-nowrap">
+                            {new Date(inv.date * 1000).toLocaleDateString()}
+                          </td>
+                          <td className="p-4 text-muted-foreground max-w-[200px] truncate">
+                            {inv.description ?? "Subscription"}
+                          </td>
+                          <td className="p-4">
+                            <Badge
+                              variant={inv.status === "paid" ? "default" : inv.status === "open" ? "outline" : "secondary"}
+                              className="text-xs uppercase"
+                            >
+                              {inv.status ?? "—"}
+                            </Badge>
+                          </td>
+                          <td className="p-4 text-right font-medium">
+                            ${inv.amount.toFixed(2)}
+                          </td>
+                          <td className="p-4 text-right">
+                            {inv.hostedInvoiceUrl ? (
+                              <a
+                                href={inv.hostedInvoiceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-primary hover:underline text-xs"
+                              >
+                                View <ExternalLink className="w-3 h-3" />
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="p-8 text-center text-muted-foreground">
+                    No billing history yet.
                   </div>
                 )}
               </div>
