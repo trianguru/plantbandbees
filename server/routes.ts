@@ -15,7 +15,7 @@ async function seedDatabase() {
     // Subscription Tiers
     await storage.createProduct({
       name: "The Sprout Tier",
-      description: "Perfect for studios or 1-bedroom Airbnbs. Includes 3 resilient plants.",
+      description: "Perfect for studios or 1-bedroom Airbnbs. Includes 6–8 resilient plants.",
       type: "subscription_tier",
       price: "49.99",
       imageUrl: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=1000&auto=format&fit=crop",
@@ -27,7 +27,7 @@ async function seedDatabase() {
     
     await storage.createProduct({
       name: "The Canopy Tier",
-      description: "Ideal for 2-3 bedroom homes. Includes 5 plants mixed size.",
+      description: "Ideal for 2-3 bedroom homes. Includes 9–10 plants, mixed sizes.",
       type: "subscription_tier",
       price: "89.99",
       imageUrl: "https://images.unsplash.com/photo-1545241047-6083a3684587?q=80&w=1000&auto=format&fit=crop",
@@ -39,7 +39,7 @@ async function seedDatabase() {
 
     await storage.createProduct({
       name: "The Forest Tier",
-      description: "For luxury estates. 10+ premium plants including large floor plants.",
+      description: "For luxury estates. 12–14 premium plants including large floor plants.",
       type: "subscription_tier",
       price: "159.99",
       imageUrl: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1000&auto=format&fit=crop",
