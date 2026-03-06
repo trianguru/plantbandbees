@@ -1,17 +1,20 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "Plant Band Bees <no-reply@plantbandbees.com>";
 
-function isConfigured(): boolean {
-  return !!process.env.RESEND_API_KEY;
+let _resend: Resend | null = null;
+function getResend(): Resend | null {
+  if (!process.env.RESEND_API_KEY) return null;
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
 }
 
 export async function sendWelcomeEmail(
   email: string,
   firstName: string
 ): Promise<void> {
-  if (!isConfigured()) return;
+  const resend = getResend();
+  if (!resend) return;
   await resend.emails.send({
     from: FROM,
     to: email,
@@ -38,7 +41,8 @@ export async function sendOrderConfirmationEmail(
   productName: string,
   amount: string
 ): Promise<void> {
-  if (!isConfigured()) return;
+  const resend = getResend();
+  if (!resend) return;
   await resend.emails.send({
     from: FROM,
     to: email,
@@ -71,7 +75,8 @@ export async function sendSubscriptionCancelledEmail(
   email: string,
   firstName: string
 ): Promise<void> {
-  if (!isConfigured()) return;
+  const resend = getResend();
+  if (!resend) return;
   await resend.emails.send({
     from: FROM,
     to: email,
@@ -96,7 +101,8 @@ export async function sendPaymentFailedEmail(
   firstName: string,
   amount: string
 ): Promise<void> {
-  if (!isConfigured()) return;
+  const resend = getResend();
+  if (!resend) return;
   await resend.emails.send({
     from: FROM,
     to: email,

@@ -7,7 +7,10 @@ import { z } from "zod";
 import { subscribeToNewsletter, unsubscribeFromNewsletter } from "../../lib/mailchimp";
 import { sendWelcomeEmail } from "../../lib/email";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend(): Resend | null {
+  if (!process.env.RESEND_API_KEY) return null;
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -219,6 +222,11 @@ export function registerAuthRoutes(app: Express): void {
       const baseUrl = process.env.APP_URL ?? "https://plantbandbees.com";
       const resetUrl = `${baseUrl}/reset-password?token=${token}`;
 
+      const resend = getResend();
+      if (!resend) {
+        // Email not configured — still return 200 to not leak info
+        return res.json({ message: "If that email exists, a reset link has been sent." });
+      }
       await resend.emails.send({
         from: "Plant Band Bees <no-reply@plantbandbees.com>",
         to: email,
