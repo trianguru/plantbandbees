@@ -8,8 +8,17 @@ import {
   sendPaymentFailedEmail,
 } from "../lib/email";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-  apiVersion: "2026-02-25.clover",
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("STRIPE_SECRET_KEY environment variable is not set");
+  return new Stripe(key, { apiVersion: "2026-02-25.clover" });
+}
+let _stripe: Stripe | null = null;
+const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    if (!_stripe) _stripe = getStripe();
+    return (_stripe as any)[prop];
+  },
 });
 
 // Helper: get or create a Stripe customer for the logged-in user
