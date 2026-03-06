@@ -9,20 +9,20 @@ import ProductList from "@/pages/ProductList";
 import Cart from "@/pages/Cart";
 import Dashboard from "@/pages/Dashboard";
 import About from "@/pages/About";
-import Catalogue from "@/pages/Catalogue";
+import Blog from "@/pages/Blog";
 import Auth from "@/pages/Auth";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/catalogue" component={Catalogue} />
       <Route path="/auth" component={Auth} />
       <Route path="/products" component={ProductList} />
       <Route path="/subscriptions" component={ProductList} />
       <Route path="/cart" component={Cart} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/about" component={About} />
+      <Route path="/blog" component={Blog} />
       <Route component={NotFound} />
     </Switch>
   );

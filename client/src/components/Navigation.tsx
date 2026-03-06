@@ -36,6 +36,7 @@ export function Navigation() {
   const links = [
     { href: "/products", label: "Shop Plants" },
     { href: "/subscriptions", label: "Subscriptions" },
+    { href: "/blog", label: "Blog" },
     { href: "/about", label: "Why PlantBandBees" },
   ];
 
@@ -107,7 +108,7 @@ export function Navigation() {
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-4">
-              <Link href="/api/login">
+              <Link href="/auth">
                 <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20">
                   Host Login
                 </Button>
@@ -154,7 +155,7 @@ export function Navigation() {
                     </Button>
                   </>
                 ) : (
-                  <Link href="/api/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
                     <Button className="w-full">Host Login</Button>
                   </Link>
                 )}

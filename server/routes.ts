@@ -73,6 +73,151 @@ async function seedDatabase() {
       isNative: false,
       stock: 200
     });
+
+    // Knoxville-curated individual plants
+    await storage.createProduct({
+      name: "Tennessee Coneflower",
+      description: "Native Tennessee wildflower with striking purple petals and a bold center cone. Attracts pollinators and thrives in Knoxville summers.",
+      type: "one_time_purchase",
+      price: "18.00",
+      imageUrl: "https://images.unsplash.com/photo-1597945161640-9366e6d4253b?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "high",
+      isNative: true,
+      stock: 40
+    });
+
+    await storage.createProduct({
+      name: "River Oats Grass",
+      description: "Graceful native ornamental grass with dangling seed heads that shimmer in the breeze. Perfect for shaded porches and rain gardens.",
+      type: "one_time_purchase",
+      price: "15.00",
+      imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "partial",
+      isNative: true,
+      stock: 35
+    });
+
+    await storage.createProduct({
+      name: "Wild Blue Indigo",
+      description: "Stunning native perennial with spikes of deep blue-purple blooms in spring. Deer-resistant and pollinator-friendly.",
+      type: "one_time_purchase",
+      price: "20.00",
+      imageUrl: "https://images.unsplash.com/photo-1490750967868-88df5691cc7e?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "high",
+      isNative: true,
+      stock: 30
+    });
+
+    await storage.createProduct({
+      name: "Coral Bells (Heuchera)",
+      description: "Shade-tolerant perennial with richly colored foliage in burgundy, caramel, and lime. Adds year-round color to shaded spots.",
+      type: "one_time_purchase",
+      price: "16.00",
+      imageUrl: "https://images.unsplash.com/photo-1618522285353-e1a23cb1b3d4?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "partial",
+      isNative: false,
+      stock: 45
+    });
+
+    await storage.createProduct({
+      name: "Black-Eyed Susan",
+      description: "Cheerful native wildflower with golden-yellow petals and a dark center. Blooms all summer and self-seeds for next year.",
+      type: "one_time_purchase",
+      price: "14.00",
+      imageUrl: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "high",
+      isNative: true,
+      stock: 60
+    });
+
+    await storage.createProduct({
+      name: "Oakleaf Hydrangea",
+      description: "Showstopping native shrub with massive white blooms, peeling cinnamon bark, and brilliant fall color. A Tennessee classic.",
+      type: "one_time_purchase",
+      price: "28.00",
+      imageUrl: "https://images.unsplash.com/photo-1595351298020-038700609878?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "medium",
+      sunlightNeeds: "partial",
+      isNative: true,
+      stock: 25
+    });
+
+    await storage.createProduct({
+      name: "Golden Pothos",
+      description: "The ultimate indoor survivor. Trailing vines with heart-shaped golden-green leaves that purify air and look stunning on shelves.",
+      type: "one_time_purchase",
+      price: "22.00",
+      imageUrl: "https://images.unsplash.com/photo-1585687433353-8f3b56c8c4a1?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 80
+    });
+
+    await storage.createProduct({
+      name: "ZZ Plant",
+      description: "Nearly indestructible indoor plant with glossy, waxy leaves that thrive in low light. Perfect for any room in your Airbnb.",
+      type: "one_time_purchase",
+      price: "35.00",
+      imageUrl: "https://images.unsplash.com/photo-1632207691143-643e2a9a9361?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 50
+    });
+
+    await storage.createProduct({
+      name: "Snake Plant",
+      description: "Architectural indoor plant with upright sword-like leaves banded in green and gold. Tolerates neglect and purifies air. Note: toxic to dogs.",
+      type: "one_time_purchase",
+      price: "28.00",
+      imageUrl: "https://images.unsplash.com/photo-1599598425947-5202edd56fdb?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 70
+    });
+
+    await storage.createProduct({
+      name: "Peace Lily",
+      description: "Elegant indoor plant with deep green leaves and graceful white blooms. Thrives in shade and signals when it needs water by gently drooping.",
+      type: "one_time_purchase",
+      price: "24.00",
+      imageUrl: "https://images.unsplash.com/photo-1593691509543-c55fb32e9ce8?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 55
+    });
+
+    await storage.createProduct({
+      name: "Chinese Evergreen",
+      description: "Vibrant indoor plant with patterned leaves in green, silver, and pink. Extremely adaptable and one of the best plants for low-light spaces.",
+      type: "one_time_purchase",
+      price: "26.00",
+      imageUrl: "https://images.unsplash.com/photo-1596547609652-9cf5d8c10616?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 45
+    });
+
+    await storage.createProduct({
+      name: "Cast Iron Plant",
+      description: "The toughest houseplant around — survives low light, infrequent watering, and temperature swings. Dark glossy leaves add understated elegance.",
+      type: "one_time_purchase",
+      price: "30.00",
+      imageUrl: "https://images.unsplash.com/photo-1601985705806-5b9a10234c27?q=80&w=1000&auto=format&fit=crop",
+      maintenanceLevel: "low",
+      sunlightNeeds: "low",
+      isNative: false,
+      stock: 30
+    });
   }
 }
 
