@@ -117,6 +117,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Action Button */}
         {product.type === 'subscription_tier' ? (
+          <>
           <Button
             onClick={handleSubscribe}
             disabled={checkoutPending}
@@ -127,6 +128,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-[11px] text-muted-foreground text-center mt-2 leading-tight">
             Tier subscriptions do not include the initial purchase prices of the plants.
           </p>
+          </>
         ) : (
           <Button 
             onClick={handleAddToCart}
