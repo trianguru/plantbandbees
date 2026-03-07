@@ -109,16 +109,24 @@ const posts: Post[] = [
   },
   {
     slug: "best-plants-for-airbnb-2026",
-    title: "The Best Plants for Airbnb Properties in 2026 (And a Few to Avoid)",
+    title: "The Best Plants for Airbnb Properties in 2026 (Honest Advice, Even If You Don't Use Us)",
     excerpt:
-      "Not every plant belongs in a short-term rental. Some look great in a home with daily attention and quietly die in a rental where the cleaner isn't a horticulturalist. Here's what actually works.",
+      "We genuinely believe every traveler deserves to rest in a space that feels alive. So here's our honest guide — for hosts going it alone, and a note on what becomes possible when someone's there to tend things properly.",
     date: "March 5, 2026",
     readTime: "6 min read",
     image:
       "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1200&auto=format&fit=crop",
     sections: [
       {
-        heading: "The baseline rules before anything else",
+        heading: "A note before we start",
+        paragraphs: [
+          "This guide is written for hosts who are managing plants on their own — no service, no weekly check-ins, just you and whatever survives between turnovers.",
+          "We're sharing it because we genuinely care about this. Travelers carry stress in ways they can't always name, and proximity to living things — real plants, real green, real life — does something to a nervous system that no throw pillow or mood lamp can replicate. We want more Airbnbs to have that. Even if that means giving away our best advice for free.",
+          "That said: at the bottom of this post, we'll tell you what opens up when someone is actually there to tend things — because the list of what's possible gets a lot more interesting.",
+        ],
+      },
+      {
+        heading: "The baseline rules for going it alone",
         paragraphs: [
           "Guests won't water your plants. That's just true. A guest who waters the pothos before checkout is the exception, not something you plan around.",
           "Your cleaner is probably doing a 2-hour turnover. They're not checking soil moisture.",
@@ -127,19 +135,19 @@ const posts: Post[] = [
         ],
       },
       {
-        heading: "What actually works",
+        heading: "What actually works solo",
         paragraphs: [
           "Monstera deliciosa is the defining houseplant of this moment. The split leaves photograph well — guests take pictures of them constantly — and they signal to anyone who follows interiors that someone paid attention to this room. Water every 10–14 days and it holds.",
           "Snake plants are the most forgiving thing on this list. Weeks without water, fine. Low light, fine. They're architectural, upright, and the dark green-and-yellow variety looks deliberately chosen against white or neutral walls.",
           "Pothos is the volume builder. Fast-growing, tolerates low light, trails off shelves in a way that looks designed. One $15 plant fills a shelf in a few months.",
           "ZZ plants look like they've been there for years on day one. Slow-growing, glossy, permanent. Drought-tolerant to a degree that honestly seems unfair — once a month watering and it just holds.",
-          "Indoor olive trees are for when you want one plant to carry a whole room. A single olive in a terracotta pot just works — it photographs as an intentional design decision. They need bright light and more care, so they're not right for every listing.",
+          "Indoor olive trees are for when you want one plant to carry a whole room. A single olive in a terracotta pot just works — it photographs as an intentional design decision. They need bright light and more attention, so they're better suited to a managed setup.",
         ],
       },
       {
         heading: "Room by room",
         paragraphs: [
-          "Living room: Monstera or olive tree. You want something with presence that shows up in photos.",
+          "Living room: Monstera or a large snake plant. You want something with presence that shows up in photos.",
           "Bedroom: Snake plant. Low light, calming form, subtly improves perceived air quality.",
           "Kitchen: Pothos on a high shelf, or a small herb pot on the windowsill.",
           "Bathroom: Snake plant or air plants if there's no real light.",
@@ -147,17 +155,19 @@ const posts: Post[] = [
         ],
       },
       {
-        heading: "What to skip",
+        heading: "What's hard to do alone — but not impossible with help",
         paragraphs: [
-          "Orchids look incredible for about a week, then visibly decline and guests notice. Fiddle-leaf figs had their moment — they're high-maintenance and punish neglect with dramatic drooping. Succulents in anything less than direct sun get leggy and sad fast.",
-          "The general rule: if it needs more than occasional watering and decent light, leave it for your own place.",
+          "Orchids are breathtaking when they're right, but they need consistent attention — humidity, indirect light, careful watering schedules. Left alone between guests, they decline visibly. With weekly check-ins, they become one of the most memorable things in a room.",
+          "Seasonal plants are the same story. Poinsettias at Christmas, lilies and tulips in spring, tropical arrangements in summer — these are the plants that make a guest feel like someone actually thought about when they were arriving. They're also the plants that need someone actually showing up.",
+          "Fiddle-leaf figs remain stunning and dramatic. They're also punishing when neglected — a single draft or missed watering shows up fast. Managed properly, they're statement pieces. Unmanaged, they embarrass a room.",
+          "This is what a plant service actually unlocks. Not just convenience — it's access to a whole tier of plants that read as intentional, seasonal, alive. The kind of thing that ends up in a five-star review without the guest knowing exactly why they mentioned it.",
         ],
       },
       {
-        heading: "Why this is harder than it looks",
+        heading: "The honest version of why this matters",
         paragraphs: [
-          "Getting the right plant at the right size, replacing things between high-turnover periods, keeping the whole display looking cohesive as plants grow unevenly — it compounds. It's the kind of thing that seems easy until you're doing it for multiple properties across different seasons.",
-          "Your guests don't need to think about any of this. They just need to walk in and feel like someone cared about the space. That's what you're actually delivering. The plants are just how you do it.",
+          "Getting the right plant at the right size, rotating things seasonally, keeping the display cohesive as plants grow unevenly — it compounds. It's the kind of thing that seems manageable until you're doing it across multiple properties in different seasons.",
+          "We built PlantBandBees because we believe travelers deserve spaces that feel genuinely alive, and hosts deserve to offer that without it becoming a second job. Whether you use us or not, we hope this helps you get there.",
         ],
       },
     ],
