@@ -140,12 +140,12 @@ export default function Home() {
                 description: "We coordinate with your turnover schedule to ensure we're in and out between guests."
               }
             ].map((feature, i) => (
-              <div key={i} className="p-8 rounded-2xl bg-secondary/30 hover:bg-secondary/50 transition-colors border border-transparent hover:border-primary/10">
-                <div className="mb-6 p-4 bg-white rounded-2xl w-fit shadow-sm text-primary">
+              <div key={i} className="p-8 rounded-2xl bg-green-900 hover:bg-green-800 transition-colors border border-green-700">
+                <div className="mb-6 p-4 bg-green-800 rounded-2xl w-fit shadow-sm">
                   {feature.icon}
                 </div>
-                <h3 className="font-display text-2xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h3 className="font-display text-2xl font-bold mb-3 text-yellow-300">{feature.title}</h3>
+                <p className="text-green-100 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>

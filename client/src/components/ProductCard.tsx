@@ -124,6 +124,9 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             {checkoutPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting...</> : "Subscribe Now"}
           </Button>
+          <p className="text-[11px] text-muted-foreground text-center mt-2 leading-tight">
+            Tier subscriptions do not include the initial purchase prices of the plants.
+          </p>
         ) : (
           <Button 
             onClick={handleAddToCart}

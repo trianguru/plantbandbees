@@ -32,20 +32,20 @@ const posts: Post[] = [
       {
         heading: "The review data doesn't lie",
         paragraphs: [
-          "Airbnb listings that use words like \"serene,\" \"retreat,\" and \"natural light\" in their descriptions consistently outperform comparable properties on both bookings and review scores. That's not because the writing is better. It's because those words reflect something real about the space — and guests can tell the difference the second they walk in.",
-          "There's actual science behind this. It's called biophilia — our hardwired pull toward living things. Millions of years of evolution left us wired to feel calmer and safer near greenery. Your guests don't know that. They'll just say the place felt \"cozy\" or \"welcoming.\" Same thing.",
-          "A 2025 industry study found guests are twice as likely to leave a positive review — and specifically use the word \"experience\" — when a space has biophilic elements in it. Plants, natural materials, daylight. The bar isn't high.",
+          `Airbnb listings that use words like "serene," "retreat," and "natural light" in their descriptions consistently outperform comparable properties on both bookings and review scores. That's not because the writing is better. It's because those words reflect something real about the space — and guests can tell the difference the second they walk in.`,
+          `There's actual science behind this. It's called biophilia — our hardwired pull toward living things. Millions of years of evolution left us wired to feel calmer and safer near greenery. Your guests don't know that. They'll just say the place felt "cozy" or "welcoming." Same thing.`,
+          `A 2025 industry study found guests are twice as likely to leave a positive review — and specifically use the word "experience" — when a space has biophilic elements in it. Plants, natural materials, daylight. The bar isn't high.`,
         ],
       },
       {
         heading: "What guests are actually writing about",
         paragraphs: [
-          "No one's going to review \"the snake plant in the corner measurably reduced my cortisol.\" But guests do write things like:",
-          "\"This place actually felt lived-in, not like a rental.\"",
-          "\"I didn't want to leave.\"",
-          "\"Cozy in a way I didn't expect.\"",
-          "That's plants doing their thing quietly. A pothos trailing off a shelf, herbs on the kitchen windowsill, a monstera in the corner that catches afternoon light — these are all signals to whoever just walked through your door. Someone put thought into this. Someone cared.",
-          "That's the difference between a three-star \"it was fine\" and a five-star that ends with \"already looking at dates to come back.\"",
+          `No one's going to review "the snake plant in the corner measurably reduced my cortisol." But guests do write things like:`,
+          `"This place actually felt lived-in, not like a rental."`,
+          `"I didn't want to leave."`,
+          `"Cozy in a way I didn't expect."`,
+          `That's plants doing their thing quietly. A pothos trailing off a shelf, herbs on the kitchen windowsill, a monstera in the corner that catches afternoon light — these are all signals to whoever just walked through your door. Someone put thought into this. Someone cared.`,
+          `That's the difference between a three-star "it was fine" and a five-star that ends with "already looking at dates to come back."`,
         ],
       },
       {
@@ -85,7 +85,7 @@ const posts: Post[] = [
       {
         heading: "The air quality thing — honest version",
         paragraphs: [
-          "You've probably seen the \"plants purify your air\" claim. It's everywhere. And it's... partially true, but oversold.",
+          `You've probably seen the "plants purify your air" claim. It's everywhere. And it's... partially true, but oversold.`,
           "Plants do remove volatile organic compounds, CO2, nitrogen dioxide, and fine particles. The effect is real. It's just modest at the scale of three to five plants in a room. The NASA study people love to cite used conditions that don't translate to a normal living room.",
           "What plants do reliably is improve perceived air quality. Guests in plant-filled rooms consistently report the air feeling fresher even when sensors show minimal chemical change. That perception is real — it shapes how comfortable someone feels, how well they sleep, whether they wake up with a low-grade headache that tips a good stay into an annoying one.",
         ],
@@ -101,7 +101,7 @@ const posts: Post[] = [
         heading: "So what do you actually do with this",
         paragraphs: [
           "You don't need to cite research in your Airbnb copy. But you can write the description with real confidence now:",
-          "\"We designed this space with your wellbeing in mind — natural light, real plants, materials that help you actually unwind.\"",
+          `"We designed this space with your wellbeing in mind — natural light, real plants, materials that help you actually unwind."`,
           "That's not a marketing claim. That's what your guests' nervous systems are going to experience when they walk through the door. The science backs it. The reviews will confirm it.",
         ],
       },
