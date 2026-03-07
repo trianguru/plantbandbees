@@ -31,10 +31,10 @@ This plan outlines the complete digital marketing strategy for PlantBandBees, in
 
 ### 🔄 In Progress (Phase 4-5)
 
-- [ ] Deploy to Railway
-- [ ] Purchase domain (plantbandbees.com - AVAILABLE)
+- [ ] Integrate Stripe 
+- [x] Purchase domain (plantbandbees.com - AVAILABLE)
 - [ ] Configure analytics with real IDs
-- [ ] Set up Mailchimp account
+- [x] Set up Mailchimp account
 - [ ] Launch Google Ads
 - [ ] Launch Facebook/Instagram ads
 
