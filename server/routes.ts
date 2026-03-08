@@ -7,6 +7,7 @@ import { registerStripeRoutes } from "./routes/stripe";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { addToWaitlist } from "./lib/mailchimp";
+import { sendWaitlistNotificationEmail } from "./lib/email";
 
 async function seedDatabase() {
   const products = await storage.getProducts();
@@ -350,6 +351,18 @@ export async function registerRoutes(
       }).catch(error => {
         console.error("Failed to add to Mailchimp:", error);
         // Don't fail the request if Mailchimp fails
+      });
+
+      // Notify admin (async, non-blocking)
+      sendWaitlistNotificationEmail({
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        propertyCount: input.propertyCount,
+        serviceInterest: input.serviceInterest,
+        source: input.source,
+      }).catch(error => {
+        console.error("Failed to send waitlist notification email:", error);
       });
 
       res.status(201).json({ message: "Successfully joined the waiting list!", id: signup.id });

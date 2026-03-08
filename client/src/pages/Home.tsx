@@ -5,6 +5,7 @@ import { Leaf, ShieldCheck, Truck, Star, Sparkles } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductCard } from "@/components/ProductCard";
 import { useEffect, useState } from "react";
+import { WaitlistForm } from "@/components/WaitlistForm";
 
 export default function Home() {
   const { data: products, isLoading } = useProducts();
@@ -202,19 +203,8 @@ export default function Home() {
               Be among the first Knoxville hosts to bring beautiful, maintenance-free plants into your rental. Early members get priority scheduling and exclusive launch pricing.
             </p>
           </div>
-          <div className="bg-white rounded-3xl shadow-2xl border border-[#2d5a27]/10 overflow-hidden">
-            <iframe
-              src="https://docs.google.com/forms/d/e/1FAIpQLSe2Y3nBgOGzfdtd0KBW5MOfbeuSaJ7Nekqi_arSSJ3uYnpc6g/viewform?embedded=true"
-              width="100%"
-              height="1200"
-              frameBorder="0"
-              marginHeight={0}
-              marginWidth={0}
-              title="PlantBandBees Waitlist Signup"
-              className="w-full"
-            >
-              Loading…
-            </iframe>
+          <div className="bg-white rounded-3xl shadow-2xl border border-[#2d5a27]/10 overflow-hidden p-8">
+            <WaitlistForm />
           </div>
           <p className="text-center text-sm text-muted-foreground mt-4">
             🔒 Your information is private and will never be shared or sold.

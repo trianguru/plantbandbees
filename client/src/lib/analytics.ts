@@ -13,7 +13,6 @@
 declare global {
   interface Window {
     gtag?: (...args: any[]) => void;
-    fbq?: (...args: any[]) => void;
     dataLayer?: any[];
   }
 }
@@ -31,10 +30,6 @@ export function trackPageView(url: string, title?: string) {
     });
   }
 
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq("track", "PageView");
-  }
 }
 
 /**
@@ -53,16 +48,6 @@ export function trackWaitlistSignup(data: {
       event_label: "waitlist_signup",
       source: data.source || "organic",
       property_count: data.propertyCount,
-    });
-  }
-
-  // Facebook Pixel - Lead event
-  if (window.fbq) {
-    window.fbq("track", "Lead", {
-      content_name: "Waiting List Signup",
-      source: data.source || "organic",
-      value: 100.0, // Estimated value of a lead
-      currency: "USD",
     });
   }
 
@@ -115,16 +100,6 @@ export function trackProductView(productId: number, productName: string, price: 
     });
   }
 
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq("track", "ViewContent", {
-      content_ids: [productId.toString()],
-      content_name: productName,
-      content_type: "product",
-      value: parseFloat(price),
-      currency: "USD",
-    });
-  }
 }
 
 /**
@@ -147,16 +122,6 @@ export function trackAddToCart(productId: number, productName: string, price: st
     });
   }
 
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq("track", "AddToCart", {
-      content_ids: [productId.toString()],
-      content_name: productName,
-      content_type: "product",
-      value: parseFloat(price) * quantity,
-      currency: "USD",
-    });
-  }
 }
 
 /**
@@ -172,13 +137,6 @@ export function trackSubscriptionSelection(tier: string, price: string) {
     });
   }
 
-  if (window.fbq) {
-    window.fbq("track", "Subscribe", {
-      value: parseFloat(price),
-      currency: "USD",
-      predicted_ltv: parseFloat(price) * 12, // Annual value
-    });
-  }
 }
 
 /**

@@ -96,6 +96,38 @@ export async function sendSubscriptionCancelledEmail(
   });
 }
 
+export async function sendWaitlistNotificationEmail(submitter: {
+  name: string;
+  email: string;
+  phone?: string | null;
+  propertyCount?: number | null;
+  serviceInterest?: string | null;
+  source?: string | null;
+}): Promise<void> {
+  const resend = getResend();
+  if (!resend) return;
+  const adminEmail = process.env.ADMIN_EMAIL || "hillsidesllc@plantbandbees.com";
+  await resend.emails.send({
+    from: FROM,
+    to: adminEmail,
+    subject: `New Waitlist Signup: ${submitter.name}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#1a2e0e">
+        <h1 style="color:#2d5016">New Waitlist Signup</h1>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0">
+          <tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;width:40%">Name</td><td style="padding:8px 0;border-bottom:1px solid #eee">${submitter.name}</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600">Email</td><td style="padding:8px 0;border-bottom:1px solid #eee">${submitter.email}</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600">Phone</td><td style="padding:8px 0;border-bottom:1px solid #eee">${submitter.phone || "—"}</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600">Properties</td><td style="padding:8px 0;border-bottom:1px solid #eee">${submitter.propertyCount ?? "—"}</td></tr>
+          <tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600">Service Interest</td><td style="padding:8px 0;border-bottom:1px solid #eee">${submitter.serviceInterest || "—"}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:600">Source</td><td style="padding:8px 0">${submitter.source || "—"}</td></tr>
+        </table>
+        <p style="margin-top:24px;font-size:0.85rem;color:#888">Sent automatically by plantbandbees.com</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendPaymentFailedEmail(
   email: string,
   firstName: string,
