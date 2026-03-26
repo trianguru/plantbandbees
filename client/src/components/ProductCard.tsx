@@ -5,8 +5,38 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { Droplets, Sun, Loader2, ShoppingCart } from "lucide-react";
+import { Droplets, Sun, Loader2, ShoppingCart, AlertTriangle } from "lucide-react";
 import { useLocation } from "wouter";
+
+// Plants with known pet toxicity (source: ASPCA)
+// Key = product name, Value = who it affects
+const PET_TOXICITY: Record<string, string> = {
+  "Golden Pothos":      "toxic to cats & dogs",
+  "Snake Plant":        "toxic to cats & dogs",
+  "Peace Lily":         "toxic to cats & dogs",
+  "ZZ Plant":           "toxic to cats & dogs",
+  "Chinese Evergreen":  "toxic to cats & dogs",
+  "Oakleaf Hydrangea":  "toxic to cats & dogs",
+  "Wild Blue Indigo":   "toxic in large amounts to dogs & horses",
+};
+
+// Better plant-specific Unsplash photos (overrides DB imageUrl until real photos are ready)
+const PLANT_IMAGES: Record<string, string> = {
+  "Knoxville Fern Trio":    "https://images.unsplash.com/photo-1550159930-40066082a4fc?q=80&w=1000&auto=format&fit=crop",
+  "Guest Gift Succulent":   "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?q=80&w=1000&auto=format&fit=crop",
+  "Tennessee Coneflower":   "https://images.unsplash.com/photo-1597945161640-9366e6d4253b?q=80&w=1000&auto=format&fit=crop",
+  "River Oats Grass":       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1000&auto=format&fit=crop",
+  "Wild Blue Indigo":       "https://images.unsplash.com/photo-1490750967868-88df5691cc7e?q=80&w=1000&auto=format&fit=crop",
+  "Coral Bells (Heuchera)": "https://images.unsplash.com/photo-1618522285353-e1a23cb1b3d4?q=80&w=1000&auto=format&fit=crop",
+  "Black-Eyed Susan":       "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?q=80&w=1000&auto=format&fit=crop",
+  "Oakleaf Hydrangea":      "https://images.unsplash.com/photo-1595351298020-038700609878?q=80&w=1000&auto=format&fit=crop",
+  "Golden Pothos":          "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=1000&auto=format&fit=crop",
+  "ZZ Plant":               "https://images.unsplash.com/photo-1632207691143-643e2a9a9361?q=80&w=1000&auto=format&fit=crop",
+  "Snake Plant":            "https://images.unsplash.com/photo-1599598425947-5202edd56fdb?q=80&w=1000&auto=format&fit=crop",
+  "Peace Lily":             "https://images.unsplash.com/photo-1593691509543-c55fb32e9ce8?q=80&w=1000&auto=format&fit=crop",
+  "Chinese Evergreen":      "https://images.unsplash.com/photo-1596547609652-9cf5d8c10616?q=80&w=1000&auto=format&fit=crop",
+  "Cast Iron Plant":        "https://images.unsplash.com/photo-1601985705806-5b9a10234c27?q=80&w=1000&auto=format&fit=crop",
+};
 
 interface ProductCardProps {
   product: Product;
@@ -18,6 +48,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [checkoutPending, setCheckoutPending] = useState(false);
+  const imageUrl = PLANT_IMAGES[product.name] ?? product.imageUrl;
+  const toxicityWarning = PET_TOXICITY[product.name];
 
   const handleAddToCart = () => {
     addItem({
@@ -71,8 +103,8 @@ export function ProductCard({ product }: ProductCardProps) {
     <div className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
       {/* Image Container */}
       <div className="aspect-[4/3] overflow-hidden relative bg-secondary/20">
-        <img 
-          src={product.imageUrl} 
+        <img
+          src={imageUrl}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
@@ -80,6 +112,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm backdrop-blur-sm">
             Tennessee Native
           </Badge>
+        )}
+        {toxicityWarning && (
+          <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 bg-orange-50/95 border border-orange-200 text-orange-800 text-[11px] font-medium px-2.5 py-1.5 rounded-lg backdrop-blur-sm">
+            <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-orange-500" />
+            <span>⚠️ {toxicityWarning}</span>
+          </div>
         )}
       </div>
 

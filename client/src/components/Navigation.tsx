@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Leaf, Menu, ShoppingBag, Moon, Sun } from "lucide-react";
+import { Menu, ShoppingBag, Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -37,7 +37,7 @@ export function Navigation() {
     { href: "/products", label: "Shop Plants" },
     { href: "/subscriptions", label: "Subscriptions" },
     { href: "/blog", label: "Blog" },
-    { href: "/about", label: "Why PlantBandBees" },
+    { href: "/about", label: "Why Air Bloom and Bees" },
   ];
 
   return (
@@ -45,9 +45,8 @@ export function Navigation() {
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 mx-auto">
         
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold text-primary tracking-tight hover:opacity-80 transition-opacity">
-          <Leaf className="h-6 w-6 text-primary fill-primary/20" />
-          PlantB & Bees
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <img src="/logo.jpg" alt="Air Bloom and Bees" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}

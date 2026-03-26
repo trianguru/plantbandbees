@@ -1,7 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Leaf, ShieldCheck, Truck, Star, Sparkles } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, Star, Sparkles, TrendingUp } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductCard } from "@/components/ProductCard";
 import { useEffect, useState } from "react";
@@ -68,14 +68,14 @@ export default function Home() {
             <div className="space-y-8 animate-in slide-in-from-left-8 fade-in duration-700">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
                 <Leaf className="w-4 h-4" />
-                <span>Exclusively for Knoxville Airbnb Hosts</span>
+                <span>For Airbnb & STR Hosts in East Tennessee</span>
               </div>
               <h1 className="font-display text-5xl md:text-7xl font-bold leading-[1.1] text-foreground">
-                Local Roots, <br />
-                <span className="text-primary italic">Global Guests</span>
+                Every subscription <br />
+                <span className="text-primary italic">plants a garden.</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-lg leading-relaxed">
-                Premium, maintenance-free plant subscriptions designed for your short-term rentals. We water, feed, and replace—so you don't have to.
+                Guests don't just prefer spaces with plants — they're wired for them. Biophilia, the human instinct to connect with living systems, is why plant-filled rentals earn better reviews, higher ratings, and repeat bookings. We bring that to your property. And with every host we serve, we plant a free native pollinator garden — for the bees, and for the land.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/subscriptions">
@@ -101,18 +101,32 @@ export default function Home() {
               </div>
               <div className="absolute -bottom-8 -left-8 bg-white p-4 rounded-2xl shadow-xl border border-border/50 max-w-[200px] hidden md:block animate-bounce duration-[3000ms]">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white overflow-hidden">
-                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" />
-                      </div>
-                    ))}
-                  </div>
+                  <span className="text-2xl">🌿</span>
+                  <span className="text-xl">🐝</span>
                 </div>
-                <p className="text-sm font-medium text-foreground">Trusted by 50+ local hosts</p>
+                <p className="text-sm font-medium text-foreground">Spring 2026 — Knoxville's first plant subscription for hosts</p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* BIOPHILIA SECTION */}
+      <section className="py-20 bg-[#f7faf5] border-y border-green-100">
+        <div className="container px-4 md:px-6 max-w-4xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium border border-green-200">
+            <Leaf className="w-4 h-4" />
+            <span>The Science Behind It</span>
+          </div>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+            Humans are wired to crave living things.
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            Biophilia — from the Greek for "love of life" — is the innate human drive to connect with other living systems. It's not aesthetic preference. It's biology. Studies show that exposure to plants lowers cortisol, reduces blood pressure, sharpens focus, and produces measurable feelings of calm and wellbeing. No candle, no mood lighting, no thread-count can replicate it.
+          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            Travelers arrive at your property carrying stress they haven't even named yet. A room with living plants meets them differently than an empty one. That's not marketing — that's what the research says. And it shows up in your reviews.
+          </p>
         </div>
       </section>
 
@@ -120,25 +134,30 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4">Why Choose PlantB & Bees?</h2>
-            <p className="text-muted-foreground text-lg">We understand the unique needs of Knoxville hosts. Let us handle the greenery while you handle the guests.</p>
+            <h2 className="font-display text-4xl font-bold mb-4">Why Choose Air Bloom and Bees?</h2>
+            <p className="text-muted-foreground text-lg">The Smokies draw 14 million visitors a year. Thousands of hosts compete for their attention. We help you stand out — and do good while you're at it.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 icon: <ShieldCheck className="w-10 h-10 text-primary" />,
                 title: "Zero Maintenance",
-                description: "Our team visits monthly to water, prune, and feed. If a plant looks sad, we swap it out for free."
+                description: "Our team handles watering, pruning, and feeding. If a plant looks sad, we swap it out — no questions, no extra charge."
+              },
+              {
+                icon: <TrendingUp className="w-10 h-10 text-yellow-300" />,
+                title: "Better Reviews. Higher Rates.",
+                description: "Plant-filled listings earn measurably higher guest ratings and longer average stays. Plants don't just look good — they convert. Your subscription pays for itself."
               },
               {
                 icon: <Leaf className="w-10 h-10 text-accent" />,
-                title: "Tennessee Native Options",
-                description: "Showcase the beauty of the Smoky Mountains with our curated selection of hardy native plants."
+                title: "A Free Pollinator Garden",
+                description: "Every subscription includes a free native pollinator garden. We choose plants that belong here — ones that will thrive long after we've stepped back and let nature take over."
               },
               {
                 icon: <Truck className="w-10 h-10 text-blue-500" />,
-                title: "Flexible Delivery",
-                description: "We coordinate with your turnover schedule to ensure we're in and out between guests."
+                title: "Works Around Your Guests",
+                description: "We coordinate around your turnover schedule so your property is always guest-ready. In and out between bookings, every time."
               }
             ].map((feature, i) => (
               <div key={i} className="p-8 rounded-2xl bg-green-900 hover:bg-green-800 transition-colors border border-green-700">
@@ -188,6 +207,63 @@ export default function Home() {
         </div>
       </section>
 
+      {/* THE BEES SECTION */}
+      <section className="py-24 bg-amber-50 border-y border-amber-200/60">
+        <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6 animate-in slide-in-from-left-8 fade-in duration-700">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-200/60 text-amber-900 text-sm font-medium border border-amber-300/50">
+                <span>🐝</span>
+                <span>The Bees Part of Air Bloom and Bees</span>
+              </div>
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-amber-900 leading-tight">
+                Bees are nature's matchmakers. And they're disappearing.
+              </h2>
+              <p className="text-amber-800/80 text-lg leading-relaxed">
+                Bees carry pollen — the reproductive material of plants — from flower to flower, enabling life to continue across East Tennessee's extraordinarily diverse landscape. In 2024–2025, U.S. managed honeybee colonies declined by over 40%. Wild native bee species are faring even worse. Without them, most of the region's 500+ native plant species cannot reproduce.
+              </p>
+              <p className="text-amber-800/80 text-lg leading-relaxed">
+                That's why every host we serve gets a <strong>free native pollinator garden</strong> — coneflowers, wild indigo, river oats, coral bells — plants that belong to this land and are built to thrive here long after we've stepped back. We plant it right. Then nature takes over. That's the whole point.
+              </p>
+              <Link href="/about">
+                <Button variant="outline" className="border-amber-400 text-amber-900 hover:bg-amber-100 mt-2">
+                  Read our full mission →
+                </Button>
+              </Link>
+            </div>
+
+            {/* Bee Characters Placeholder — replace with final renders */}
+            <div className="flex flex-col items-center justify-center gap-6 animate-in slide-in-from-right-8 fade-in duration-1000 delay-200">
+              <div className="bg-amber-100 border-2 border-dashed border-amber-300 rounded-3xl p-10 w-full text-center space-y-4">
+                <div className="flex justify-center gap-6 text-7xl">
+                  <span title="The clumsy one" className="animate-bounce duration-[2000ms]">🐝</span>
+                  <span title="The hyper one" className="animate-spin duration-[800ms]" style={{ display: 'inline-block', animationDuration: '1.5s' }}>🐝</span>
+                  <span title="The wise one" className="opacity-90">🐝</span>
+                </div>
+                <p className="text-amber-700 font-medium text-sm">
+                  Meet our three bee characters — coming soon
+                </p>
+                <p className="text-amber-600/70 text-xs">
+                  The clumsy one · the hyper one · the wise one who sees everything
+                </p>
+              </div>
+              {/* Bee's Knees Award */}
+              <div className="bg-white border border-amber-300 rounded-2xl p-6 w-full shadow-sm">
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl">🏆</div>
+                  <div>
+                    <p className="font-display font-bold text-amber-900">The Bee's Knees Award</p>
+                    <p className="text-sm text-amber-800/70 mt-1">
+                      When your property earns its bee-friendly plants, you receive a handcrafted wooden plaque — officially recognizing you as a Certified Pollinator Station. It goes outside. Guests notice it. It means something.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* GOOGLE FORM WAITLIST SECTION */}
       <section id="google-waitlist-form" className="py-16 md:py-24 bg-gradient-to-b from-[#f0f7ee] to-white">
         <div className="container px-4 md:px-6 max-w-4xl mx-auto">
@@ -217,12 +293,11 @@ export default function Home() {
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 font-display text-2xl font-bold mb-6">
-                <Leaf className="h-8 w-8 text-yellow-400" />
-                PlantB & Bees
+              <div className="flex items-center gap-2 mb-6">
+                <img src="/logo.jpg" alt="Air Bloom and Bees" className="h-12 w-auto brightness-110" />
               </div>
               <p className="text-white/80 max-w-md mb-8">
-                Bringing life to short-term rentals across East Tennessee.
+                Bringing life to short-term rentals across East Tennessee — and a free pollinator garden to every property we serve.
                 Locally owned and operated in Knoxville.
               </p>
             </div>
@@ -231,20 +306,19 @@ export default function Home() {
               <ul className="space-y-3">
                 <li><Link href="/subscriptions" className="hover:text-yellow-400 transition-colors">Subscriptions</Link></li>
                 <li><Link href="/products" className="hover:text-yellow-400 transition-colors">One-Time Purchase</Link></li>
-                <li><Link href="/gifts" className="hover:text-yellow-400 transition-colors">Guest Gifts</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">Company</h4>
               <ul className="space-y-3">
                 <li><Link href="/about" className="hover:text-yellow-400 transition-colors">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-yellow-400 transition-colors">Contact</Link></li>
-                <li><Link href="/api/login" className="hover:text-yellow-400 transition-colors">Host Login</Link></li>
+                <li><a href="#google-waitlist-form" className="hover:text-yellow-400 transition-colors">Join Waitlist</a></li>
+                <li><Link href="/auth" className="hover:text-yellow-400 transition-colors">Host Login</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-white/20 mt-12 pt-8 text-center text-sm text-white/60">
-            © {new Date().getFullYear()} PlantB & Bees. All rights reserved. Built with 🌿 in Knoxville, TN
+            © {new Date().getFullYear()} Air Bloom and Bees. All rights reserved. Built with 🌿 in Knoxville, TN
           </div>
         </div>
       </footer>

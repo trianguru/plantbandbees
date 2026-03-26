@@ -6,7 +6,7 @@ const team = [
         name: "Trey Sides",
         fullName: "William Hill Sides III",
         title: "CEO & Co-Founder",
-        bio: "The older of the two by four years, Trey is the vision behind PlantB & Bees. A lifelong plant enthusiast and East Tennessee native, he saw what the short-term rental industry was missing before most hosts even knew to look for it.",
+        bio: "The older of the two by four years, Trey is the vision behind Air Bloom and Bees. A lifelong plant enthusiast and East Tennessee native, he saw what the short-term rental industry was missing before most hosts even knew to look for it.",
         image: "/trey-sides.jpg",
   },
   {
@@ -45,30 +45,30 @@ export default function About() {
                                                             <h2 className="font-display text-3xl font-bold mb-4 text-foreground">Our Story</h2>
                                                             <p className="text-muted-foreground text-lg leading-relaxed mb-5">
                                                                             We're Trey and Zach Sides — brothers raised in East Tennessee with dirt under our
-                                                                            fingernails and a genuine affection for the kind of greenery that makes a room feel
+                                                                            fingernails and a genuine love for the kind of greenery that makes a room feel
                                                                             like it's breathing.
                                                             </p>
                                                             <p className="text-muted-foreground text-lg leading-relaxed mb-5">
-                                                                            We kept noticing something about the short-term rental world: hosts were already
-                                                                            plugged into a whole ecosystem of niche services — cleaning crews, linen companies,
-                                                                            landscapers, handymen. Everyone had found their lane. But nobody was doing plants.
-                                                                            Not well, anyway. And we knew — because the research is actually quite clear on
-                                                                            this — that plants do something to people that no throw pillow or mood lamp can.
-                                                                            They soothe us. Subconsciously, biologically, deeply. Travelers carry stress in
-                                                                            ways they don't even recognize, and a thoughtfully planted space meets them at the
-                                                                            door differently than an empty one.
+                                                                            The Great Smoky Mountains National Park is the most visited national park in the
+                                                                            country — over 14 million people pass through every year. Tens of thousands of
+                                                                            short-term rental hosts across East Tennessee compete for their stays. Hosts have
+                                                                            cleaning crews, linen services, landscapers. But nobody was doing plants well.
+                                                                            And we knew — because the research is clear — that plants do something no throw
+                                                                            pillow or mood lamp can. They soothe people. Subconsciously, biologically, deeply.
+                                                                            Travelers carry stress they don't even recognize, and a thoughtfully planted space
+                                                                            meets them at the door differently.
                                                             </p>
                                                             <p className="text-muted-foreground text-lg leading-relaxed">
-                                                                            We built PlantB & Bees for the SuperHosts and the hosts who want to become them —
-                                                                            the ones who understand that standing out isn't about spending more, it's about
-                                                                            caring more. Science-backed, locally rooted, and genuinely enthusiastic about
-                                                                            bringing more life into the spaces people call home for a night.
+                                                                            But the real reason we started this — the reason we get up — is the bees. The
+                                                                            subscription service funds the mission. The mission is conservation. Every host
+                                                                            we serve gets a free native pollinator garden. Every garden is a small piece of
+                                                                            East Tennessee given back to the ecosystem that built it. That's Air Bloom and Bees.
                                                             </p>
                                               </div>
                                               <div className="rounded-3xl overflow-hidden shadow-xl rotate-3 hover:rotate-0 transition-all duration-500">
                                                             <img
                                                                               src="/trey-and-zac.jpg"
-                                                                              alt="Trey and Zach Sides, co-founders of PlantB & Bees"
+                                                                              alt="Trey and Zach Sides, co-founders of Air Bloom and Bees"
                                                                               className="w-full h-auto object-cover"
                                                                             />
                                               </div>
@@ -86,18 +86,19 @@ export default function About() {
                                               </div>
                                               <div className="text-center p-6 bg-secondary/30 rounded-2xl">
                                                             <Leaf className="w-12 h-12 text-primary mx-auto mb-4" />
-                                                            <h3 className="font-display text-xl font-bold mb-2">Science-Backed</h3>
+                                                            <h3 className="font-display text-xl font-bold mb-2">Rooted in Biophilia</h3>
                                                             <p className="text-muted-foreground">
-                                                                            Plants measurably reduce cortisol, improve mood, and make spaces feel lived-in.
-                                                                            We're not decorating — we're designing for wellbeing.
+                                                                            Biophilia is the human instinct to connect with living systems. Plants lower cortisol,
+                                                                            reduce blood pressure, and produce calm that no man-made object can replicate.
+                                                                            We're not decorating — we're designing for something deeper.
                                                             </p>
                                               </div>
                                               <div className="text-center p-6 bg-secondary/30 rounded-2xl">
                                                             <Heart className="w-12 h-12 text-destructive/70 mx-auto mb-4" />
-                                                            <h3 className="font-display text-xl font-bold mb-2">Host First</h3>
+                                                            <h3 className="font-display text-xl font-bold mb-2">Conservation First</h3>
                                                             <p className="text-muted-foreground">
-                                                                            Built around the rhythms of short-term rental hosting — low maintenance, high
-                                                                            impact, always guest-ready.
+                                                                            The subscription funds the mission. Every client means another pollinator garden.
+                                                                            Every garden is a piece of East Tennessee given back.
                                                             </p>
                                               </div>
                                   </section>
@@ -108,35 +109,39 @@ export default function About() {
                                                             <span className="text-5xl">🐝</span>
                                               </div>
                                               <h2 className="font-display text-3xl font-bold mb-4 text-foreground text-center">
-                                                            About the Bees
+                                                            The Bees Are the Mission
                                               </h2>
                                               <div className="max-w-2xl mx-auto space-y-5">
                                                             <p className="text-muted-foreground text-lg leading-relaxed text-center">
-                                                                            The name isn't decorative.
+                                                                            The name isn't decorative. The bees are why we exist.
                                                             </p>
                                                             <p className="text-muted-foreground text-lg leading-relaxed">
-                                                                            East Tennessee has some of the most diverse plant life in North America, and with
-                                                                            that comes an extraordinary pollinator ecosystem. We have a genuine, unironic love
-                                                                            for bees — and we haven't forgotten the years when colony collapse disorder made
-                                                                            headlines and bee populations declined in ways that should have alarmed everyone
-                                                                            more than they did.
+                                                                            Bees are nature's matchmakers. They carry pollen — the reproductive material of
+                                                                            plants — from flower to flower, enabling life to propagate across East Tennessee's
+                                                                            extraordinarily biodiverse landscape. More than 500 native plant species call this
+                                                                            region home. Most of them depend on pollinators to survive. In 2024–2025, U.S.
+                                                                            managed honeybee colonies declined by over 40%. Wild native species are faring
+                                                                            even worse. That's not a trend. That's an emergency.
                                                             </p>
                                                             <p className="text-muted-foreground text-lg leading-relaxed">
-                                                                            So we made a commitment: for every property in our network, we offer hosts the
-                                                                            opportunity to have bee-friendly native plants installed on their outdoor grounds
-                                                                            at no charge. Coneflowers, wild indigo, river oats — plants the bees genuinely
-                                                                            love and that Tennessee's soil genuinely wants to grow.
+                                                                            So here's our commitment: every host who subscribes gets a free native pollinator
+                                                                            garden installed on their property. Coneflowers, wild indigo, river oats, coral
+                                                                            bells — plants the bees love, and that Tennessee's soil has always known how to
+                                                                            grow. We don't promise to maintain it forever. We plant it right, using species
+                                                                            that belong here, so that nature can take over. We get them started. After that,
+                                                                            they belong to the land.
                                                             </p>
                                                             <p className="text-muted-foreground text-lg leading-relaxed">
-                                                                            And we've seen it every time — the bees come. They find it. And when they do,
-                                                                            we've heard on very good authority that they'll erect a small wooden recognition
-                                                                            bee on your property that reads:
+                                                                            The subscription service is how we fund this. Every client means another
+                                                                            pollinator garden. Every garden means more habitat. The bees find it — they
+                                                                            always do — and when they do, we leave a small handcrafted plaque at the
+                                                                            property that reads:
                                                             </p>
                                                             <blockquote className="border-l-4 border-amber-400 pl-6 py-2 italic text-foreground text-lg">
-                                                                            "You've been officially declared the Bees Knees."
+                                                                            "You've been officially declared the Bee's Knees."
                                                                             <br />
                                                                             <span className="text-sm not-italic text-muted-foreground mt-2 block">
-                                                                                              God Speed. Signed, with their knees — the Bees.
+                                                                                              Godspeed. Signed, with their knees — the Bees.
                                                                             </span>
                                                             </blockquote>
                                                             <p className="text-muted-foreground text-lg leading-relaxed">

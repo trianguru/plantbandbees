@@ -3,7 +3,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { useProducts } from "@/hooks/use-products";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertTriangle } from "lucide-react";
 
 export default function ProductList() {
   const { data: products, isLoading } = useProducts();
@@ -68,6 +68,26 @@ export default function ProductList() {
             No products found in this category.
           </div>
         )}
+
+        {/* Pet toxicity disclaimer */}
+        <div className="mt-16 flex gap-3 items-start bg-orange-50 border border-orange-200 rounded-2xl p-5 max-w-3xl mx-auto">
+          <AlertTriangle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+          <div className="text-sm text-orange-900">
+            <p className="font-semibold mb-1">Pet Safety Notice</p>
+            <p className="text-orange-800/80 leading-relaxed">
+              Some plants in our catalog are toxic to cats, dogs, or other animals if ingested. Plants marked with a warning badge should be placed out of reach of pets. When in doubt, consult the{" "}
+              <a
+                href="https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-medium hover:text-orange-700"
+              >
+                ASPCA Toxic Plant List
+              </a>{" "}
+              or your veterinarian before purchasing. We're happy to recommend pet-safe alternatives — just ask!
+            </p>
+          </div>
+        </div>
       </main>
     </div>
   );

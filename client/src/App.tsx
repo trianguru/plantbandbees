@@ -11,6 +11,7 @@ import Dashboard from "@/pages/Dashboard";
 import About from "@/pages/About";
 import Blog from "@/pages/Blog";
 import Auth from "@/pages/Auth";
+import WaitlistSuccess from "@/pages/WaitlistSuccess";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/about" component={About} />
       <Route path="/blog" component={Blog} />
+      <Route path="/waitlist/success" component={WaitlistSuccess} />
       <Route component={NotFound} />
     </Switch>
   );
