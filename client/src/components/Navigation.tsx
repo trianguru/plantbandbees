@@ -36,6 +36,7 @@ export function Navigation() {
   const links = [
     { href: "/products", label: "Shop Plants" },
     { href: "/subscriptions", label: "Subscriptions" },
+    { href: "/pollinator-garden", label: "🐝 Pollinator Garden" },
     { href: "/blog", label: "Blog" },
     { href: "/about", label: "Why Air Bloom and Bees" },
   ];

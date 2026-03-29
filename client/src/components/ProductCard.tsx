@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Product } from "@/hooks/use-products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,6 @@ import { Droplets, Sun, Loader2, ShoppingCart, AlertTriangle } from "lucide-reac
 import { useLocation } from "wouter";
 
 // Plants with known pet toxicity (source: ASPCA)
-// Key = product name, Value = who it affects
 const PET_TOXICITY: Record<string, string> = {
   "Golden Pothos":      "toxic to cats & dogs",
   "Snake Plant":        "toxic to cats & dogs",
@@ -20,22 +19,79 @@ const PET_TOXICITY: Record<string, string> = {
   "Wild Blue Indigo":   "toxic in large amounts to dogs & horses",
 };
 
-// Better plant-specific Unsplash photos (overrides DB imageUrl until real photos are ready)
-const PLANT_IMAGES: Record<string, string> = {
-  "Knoxville Fern Trio":    "https://images.unsplash.com/photo-1550159930-40066082a4fc?q=80&w=1000&auto=format&fit=crop",
-  "Guest Gift Succulent":   "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?q=80&w=1000&auto=format&fit=crop",
-  "Tennessee Coneflower":   "https://images.unsplash.com/photo-1597945161640-9366e6d4253b?q=80&w=1000&auto=format&fit=crop",
-  "River Oats Grass":       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1000&auto=format&fit=crop",
-  "Wild Blue Indigo":       "https://images.unsplash.com/photo-1490750967868-88df5691cc7e?q=80&w=1000&auto=format&fit=crop",
-  "Coral Bells (Heuchera)": "https://images.unsplash.com/photo-1618522285353-e1a23cb1b3d4?q=80&w=1000&auto=format&fit=crop",
-  "Black-Eyed Susan":       "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?q=80&w=1000&auto=format&fit=crop",
-  "Oakleaf Hydrangea":      "https://images.unsplash.com/photo-1595351298020-038700609878?q=80&w=1000&auto=format&fit=crop",
-  "Golden Pothos":          "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=1000&auto=format&fit=crop",
-  "ZZ Plant":               "https://images.unsplash.com/photo-1632207691143-643e2a9a9361?q=80&w=1000&auto=format&fit=crop",
-  "Snake Plant":            "https://images.unsplash.com/photo-1599598425947-5202edd56fdb?q=80&w=1000&auto=format&fit=crop",
-  "Peace Lily":             "https://images.unsplash.com/photo-1593691509543-c55fb32e9ce8?q=80&w=1000&auto=format&fit=crop",
-  "Chinese Evergreen":      "https://images.unsplash.com/photo-1596547609652-9cf5d8c10616?q=80&w=1000&auto=format&fit=crop",
-  "Cast Iron Plant":        "https://images.unsplash.com/photo-1601985705806-5b9a10234c27?q=80&w=1000&auto=format&fit=crop",
+// 3 photos per plant — at least 1 indoor context shot
+// Sourced from Unsplash (free to use)
+const PLANT_IMAGES: Record<string, string[]> = {
+  "Golden Pothos": [
+    "https://images.unsplash.com/photo-1696457848618-876c47b30cfd?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1679153370246-05e5d28d9fc6?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1763060819480-3261238b402e?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Snake Plant": [
+    "https://images.unsplash.com/photo-1629576595515-748c71f2ae43?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1668426231244-1827c29ef8e1?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1654124803743-edd84b769425?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "ZZ Plant": [
+    "https://images.unsplash.com/photo-1614887510005-4cec32369b38?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1599988288485-534984f5cd21?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1763741186493-509db18f6a6a?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Peace Lily": [
+    "https://images.unsplash.com/photo-1616690248297-1ec539dd910f?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1687858001773-d58b6cec5bdf?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1642049671771-8b22a7152bda?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Chinese Evergreen": [
+    "https://images.unsplash.com/photo-1610551835289-9f8a81fc3a6c?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1568151492546-1db658d0fc42?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1762963014081-252908ff3396?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Cast Iron Plant": [
+    "https://images.unsplash.com/photo-1566986422461-b017b2c5d50d?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1747774504419-f3faa4954c33?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1714318244386-6d41e5c025d9?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Knoxville Fern Trio": [
+    "https://images.unsplash.com/photo-1492139059069-0413793f4c1f?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1714235416342-1215c48540f1?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1635538700385-e1027f9868a4?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Guest Gift Succulent": [
+    "https://images.unsplash.com/photo-1621512366232-0b7b78983782?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1727546502530-2a1b0d615cce?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1619578977011-25e9ba052e32?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Tennessee Coneflower": [
+    "https://images.unsplash.com/photo-1707307553388-aefc810a96fa?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1707307550653-481ef64bb842?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1595802130966-8001f9d80846?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "River Oats Grass": [
+    "https://images.unsplash.com/photo-1630936583832-79091f5945de?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1755007398505-bc7b5e2de6ca?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1552141838-afa30fcbfa18?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Wild Blue Indigo": [
+    "https://images.unsplash.com/photo-1704262911785-6abc22d943e2?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1725172316375-f73def163e50?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1668301546224-2fe03d270ab0?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Coral Bells (Heuchera)": [
+    "https://images.unsplash.com/photo-1572691841164-cb9104505bab?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1624617791095-36673728cccf?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1686604258405-b7367ddc8ab8?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Black-Eyed Susan": [
+    "https://images.unsplash.com/photo-1602187177421-050769a1cc51?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1624729165583-3a042adcecb3?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1708869008609-0db5ea7f8eff?q=80&w=1000&auto=format&fit=crop",
+  ],
+  "Oakleaf Hydrangea": [
+    "https://images.unsplash.com/photo-1688151303530-a572c369534c?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1758993057601-78b7519489b1?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1740811619788-0e29c107e2a3?q=80&w=1000&auto=format&fit=crop",
+  ],
 };
 
 interface ProductCardProps {
@@ -48,8 +104,34 @@ export function ProductCard({ product }: ProductCardProps) {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [checkoutPending, setCheckoutPending] = useState(false);
-  const imageUrl = PLANT_IMAGES[product.name] ?? product.imageUrl;
+
+  // Hover slideshow state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const images = PLANT_IMAGES[product.name] ?? [product.imageUrl];
   const toxicityWarning = PET_TOXICITY[product.name];
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (images.length > 1) {
+      intervalRef.current = setInterval(() => {
+        setCurrentImageIndex(prev => (prev + 1) % images.length);
+      }, 1200);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setCurrentImageIndex(0);
+  };
 
   const handleAddToCart = () => {
     addItem({
@@ -100,14 +182,40 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+    <div
+      className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {/* Image Container */}
       <div className="aspect-[4/3] overflow-hidden relative bg-secondary/20">
-        <img
-          src={imageUrl}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        {images.map((src, idx) => (
+          <img
+            key={src}
+            src={src}
+            alt={product.name}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 group-hover:scale-105 ${
+              idx === currentImageIndex ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+
+        {/* Dot indicators */}
+        {images.length > 1 && (
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_, idx) => (
+              <span
+                key={idx}
+                className={`block w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  idx === currentImageIndex
+                    ? "bg-white scale-125 shadow-md"
+                    : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
         {product.isNative && (
           <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm backdrop-blur-sm">
             Tennessee Native
@@ -168,7 +276,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
           </>
         ) : (
-          <Button 
+          <Button
             onClick={handleAddToCart}
             variant="outline"
             className="w-full border-primary/20 hover:border-primary hover:bg-primary/5 hover:text-primary group-hover/btn:bg-primary"
