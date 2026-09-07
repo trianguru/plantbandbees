@@ -6,11 +6,28 @@ import { put, list } from "@vercel/blob";
 
 const BODY_LIMIT = "25mb";
 const MAX_BYTES = 25 * 1024 * 1024;
+const DEFAULT_DECOY_URL = "https://www.plantbandbees.com/";
 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_BYTES },
 });
+
+function decoyUrl(): string {
+  const raw = (process.env.BOT_DECOY_URL || DEFAULT_DECOY_URL).trim();
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return DEFAULT_DECOY_URL;
+    return u.toString();
+  } catch {
+    return DEFAULT_DECOY_URL;
+  }
+}
+
+/** Stealth: no 401 JSON — send browsers/bots to a lookalike marketing URL. */
+function rejectUnauthorized(res: Response): void {
+  res.redirect(302, decoyUrl());
+}
 
 function timingSafeEqualStr(a: string, b: string): boolean {
   const bufA = Buffer.from(a);
@@ -41,14 +58,11 @@ function requireToken(
   return (req, res, next) => {
     const expected = process.env[envName];
     if (!expected) {
-      return res.status(401).json({
-        ok: false,
-        error: `${envName} is not configured`,
-      });
+      return rejectUnauthorized(res);
     }
     const provided = extractToken(req);
     if (!provided || !timingSafeEqualStr(provided, expected)) {
-      return res.status(401).json({ ok: false, error: "Unauthorized" });
+      return rejectUnauthorized(res);
     }
     next();
   };
@@ -121,6 +135,7 @@ function rawParser() {
 /**
  * Token-gated ingest + files bot endpoints backed by Vercel Blob.
  * Mounted early (no session auth). Uses INGEST_TOKEN / FILES_TOKEN.
+ * Missing/invalid token → 302 to BOT_DECOY_URL (default www.plantbandbees.com).
  */
 export function registerBotRoutes(app: Express): void {
   app.get("/health", (req, res, next) => {
