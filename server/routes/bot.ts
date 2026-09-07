@@ -79,9 +79,10 @@ function hostIsIngest(req: Request): boolean {
   return host.includes("ingest.");
 }
 
+/** Private Blob store — access must be "private". */
 async function putJsonBlob(pathname: string, data: unknown) {
   return put(pathname, JSON.stringify(data, null, 2), {
-    access: "public",
+    access: "private",
     addRandomSuffix: false,
     contentType: "application/json",
   });
@@ -93,9 +94,16 @@ async function putBinaryBlob(
   contentType?: string,
 ) {
   return put(pathname, body, {
-    access: "public",
+    access: "private",
     addRandomSuffix: false,
     ...(contentType ? { contentType } : {}),
+  });
+}
+
+async function fetchPrivateBlob(url: string): Promise<Response> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  return fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
 }
 
@@ -263,13 +271,14 @@ export function registerBotRoutes(app: Express): void {
         const rows = items
           .map(
             (i) =>
-              `<tr><td><a href="${i.url}">${i.pathname}</a></td><td>${i.size}</td><td>${i.uploadedAt}</td></tr>`,
+              `<tr><td>${i.pathname}</td><td>${i.size}</td><td>${i.uploadedAt}</td></tr>`,
           )
           .join("\n");
         res.setHeader("Content-Type", "text/html; charset=utf-8");
         return res.send(
           `<!doctype html><html><head><title>Ingest dumps</title></head><body>
 <h1>Recent ingest dumps</h1>
+<p>Private Blob store — use <code>GET /ingest/dumps</code> with your token (Accept: application/json) to fetch metadata.</p>
 <table border="1" cellpadding="6"><thead><tr><th>Path</th><th>Size</th><th>Uploaded</th></tr></thead>
 <tbody>${rows || "<tr><td colspan=3>No dumps yet</td></tr>"}</tbody></table>
 </body></html>`,
@@ -362,7 +371,7 @@ export function registerBotRoutes(app: Express): void {
           return res.status(404).json({ ok: false, error: "Not found" });
         }
 
-        const upstream = await fetch(match.url);
+        const upstream = await fetchPrivateBlob(match.url);
         if (!upstream.ok) {
           return res.status(502).json({
             ok: false,
