@@ -134,7 +134,7 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="container px-4 md:px-6 max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4">Why Choose Air Bloom and Bees?</h2>
+            <h2 className="font-display text-4xl font-bold mb-4">Why Choose Plant B&Bs?</h2>
             <p className="text-muted-foreground text-lg">The Smokies draw 14 million visitors a year. Thousands of hosts compete for their attention. We help you stand out — and do good while you're at it.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -214,7 +214,7 @@ export default function Home() {
             <div className="space-y-6 animate-in slide-in-from-left-8 fade-in duration-700">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-200/60 text-amber-900 text-sm font-medium border border-amber-300/50">
                 <span>🐝</span>
-                <span>The Bees Part of Air Bloom and Bees</span>
+                <span>The Bees Part of Plant B&Bs</span>
               </div>
               <h2 className="font-display text-4xl md:text-5xl font-bold text-amber-900 leading-tight">
                 Bees are nature's matchmakers. And they're disappearing.
@@ -294,7 +294,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 mb-6">
-                <img src="/logo.jpg" alt="Air Bloom and Bees" className="h-12 w-auto brightness-110" />
+                <img src="/logo.jpg" alt="Plant B&Bs" className="h-12 w-auto brightness-110" />
               </div>
               <p className="text-white/80 max-w-md mb-8">
                 Bringing life to short-term rentals across East Tennessee — and a free pollinator garden to every property we serve.
@@ -318,7 +318,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-white/20 mt-12 pt-8 text-center text-sm text-white/60">
-            © {new Date().getFullYear()} Air Bloom and Bees. All rights reserved. Built with 🌿 in Knoxville, TN
+            © {new Date().getFullYear()} Plant B&Bs. All rights reserved. Built with 🌿 in Knoxville, TN
           </div>
         </div>
       </footer>

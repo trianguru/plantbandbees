@@ -159,7 +159,7 @@ export default function PollinatorGarden() {
             Your Pollinator Garden
           </h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Every Air Bloom and Bees subscription includes a free native pollinator garden — installed at your property, designed to thrive without ongoing care. Choose your mix below. We plant it right, using species that belong here, so nature takes over.
+            Every Plant B&Bs subscription includes a free native pollinator garden — installed at your property, designed to thrive without ongoing care. Choose your mix below. We plant it right, using species that belong here, so nature takes over.
           </p>
           <p className="text-sm text-muted-foreground mt-3 italic">
             "We get them started. After that, they belong to the land."

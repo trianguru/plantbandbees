@@ -11,7 +11,7 @@ export default function About() {
         <div className="bg-primary py-20 text-primary-foreground">
           <div className="container max-w-4xl mx-auto px-4 text-center">
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
-              About Air Bloom and Bees
+              About Plant B&Bs
             </h1>
             <p className="text-xl opacity-90 leading-relaxed max-w-2xl mx-auto">
               A company dedicated to helping bee populations thrive while bringing the joy of plants to every space.
@@ -26,7 +26,7 @@ export default function About() {
             <div>
               <h2 className="font-display text-3xl font-bold mb-4 text-foreground">About Us</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-5">
-                Air Bloom and Bees is a company that loves plants and loves taking care of them. We believe greenery makes spaces feel alive, calm, and welcoming — and we love sharing that with hosts and guests alike.
+                Plant B&Bs is a company that loves plants and loves taking care of them. We believe greenery makes spaces feel alive, calm, and welcoming — and we love sharing that with hosts and guests alike.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed mb-5">
                 We're especially dedicated to helping the bee population. Bees are in decline, and every native plant we place is a small step toward giving them the habitat they need to thrive.
