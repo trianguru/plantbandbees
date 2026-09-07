@@ -4,6 +4,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, attachUserToRequest } from "./replit_integrations/auth";
 import { registerStripeRoutes } from "./routes/stripe";
+import { registerBotRoutes } from "./routes/bot";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { addToWaitlist } from "./lib/mailchimp";
@@ -228,6 +229,9 @@ export async function registerRoutes(
 ): Promise<Server> {
   // Raw body parser for Stripe webhook (must come before JSON middleware)
   app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));
+
+  // Bot ingest/files - token auth only; mount before session auth
+  registerBotRoutes(app);
 
   // Setup Auth FIRST
   await setupAuth(app);
