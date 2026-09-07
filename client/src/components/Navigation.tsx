@@ -38,7 +38,7 @@ export function Navigation() {
     { href: "/subscriptions", label: "Subscriptions" },
     { href: "/pollinator-garden", label: "🐝 Pollinator Garden" },
     { href: "/blog", label: "Blog" },
-    { href: "/about", label: "Why Air Bloom and Bees" },
+    { href: "/about", label: "Why Plant B&Bs" },
   ];
 
   return (
@@ -47,7 +47,7 @@ export function Navigation() {
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <img src="/logo.jpg" alt="Air Bloom and Bees" className="h-10 w-auto" />
+          <img src="/logo.jpg" alt="Plant B&Bs" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
