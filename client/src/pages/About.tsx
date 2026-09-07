@@ -78,7 +78,7 @@ export default function About() {
                 The name isn't decorative. The bees are why we exist.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Bees are nature's matchmakers. They carry pollen — the reproductive material of plants — from flower to flower, enabling life to propagate across East Tennessee's extraordinarily biodiverse landscape. More than 500 native plant species call this region home. Most of them depend on pollinators to survive. In 2024–2025, U.S. managed honeybee colonies declined by over 40%. Wild native species are faring even worse. That's not a trend. That's an emergency.
+                Bees are nature's matchmakers. They carry pollen — the reproductive material of plants — from flower to flower, enabling life to propagate across East Tennessee's extraordinarily biodiverse landscape. More than 500 native plant species call this region home. Most of them depend on pollinators to survive. In recent years, U.S. managed honeybee colonies have seen annual losses exceeding 40%. Wild native species are faring even worse. That's not a trend. That's an emergency.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed">
                 So here's our commitment: every host who subscribes gets a free native pollinator garden installed on their property. Coneflowers, wild indigo, river oats, coral bells — plants the bees love, and that Tennessee's soil has always known how to grow. We don't promise to maintain it forever. We plant it right, using species that belong here, so that nature can take over. We get them started. After that, they belong to the land.
